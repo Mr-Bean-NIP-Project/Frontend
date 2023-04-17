@@ -8,7 +8,7 @@ const CreateSupplierModal = () => {
 
   const form = useForm({
     initialValues: {
-      supplierName: "",
+      name: "",
     },
 
     validate: {},
@@ -23,7 +23,7 @@ const CreateSupplierModal = () => {
         title="Create Supplier"
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            <TextInput size="md" label="Supplier Name" {...form.getInputProps("supplierName")}/>
+            <TextInput size="md" label="Supplier Name" {...form.getInputProps("name")}/>
           <Button fullWidth size="md" sx={{ marginTop: 20 }}>
             Create
           </Button>

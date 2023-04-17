@@ -45,7 +45,7 @@ const SelectIngredients = () => {
   const renderInputFields = () => {
     const allInputFields: JSX.Element[] = [];
     for (let i = 0; i < inputCount; i++) {
-      allInputFields.push(inputGroup);
+      allInputFields.push(<Box key={i}>{inputGroup}</Box>);
     }
     return allInputFields;
   };

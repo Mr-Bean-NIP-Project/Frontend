@@ -2,8 +2,8 @@ import {
   Button,
   Grid,
   Modal,
-  NativeSelect,
   NumberInput,
+  Select,
   TextInput,
 } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -16,10 +16,9 @@ const CreateProductModal = () => {
 
   const form = useForm({
     initialValues: {
-      productName: "",
-      servingSize: 100,
-      unit: "g",
-      servingPerPackage: 1,
+      name: "",
+      serving_unit: "g",
+      serving_per_package: 1,
       ingredients: [],
     },
 
@@ -33,22 +32,25 @@ const CreateProductModal = () => {
           <TextInput
             size="md"
             label="Product Name"
-            {...form.getInputProps("productName")}
+            placeholder="Product Name"
+            {...form.getInputProps("name")}
           />
         </Grid.Col>
         <Grid.Col span={6}>
           <NumberInput
             size="md"
             label="Serving Size"
+            placeholder="Serving Size"
             min={1}
-            {...form.getInputProps("servingSize")}
+            {...form.getInputProps("serving_size")}
           />
         </Grid.Col>
         <Grid.Col span={6}>
-          <NativeSelect
+          <Select
             size="md"
             data={["g", "ml"]}
-            label="Unit"
+            label="Serving Unit"
+            defaultValue={"g"}
             {...form.getInputProps("unit")}
           />
         </Grid.Col>
@@ -57,7 +59,7 @@ const CreateProductModal = () => {
             size="md"
             label="Serving per Package"
             min={1}
-            {...form.getInputProps("servingPerPackage")}
+            {...form.getInputProps("serving_per_package")}
           />
         </Grid.Col>
         <Grid.Col span={12}>
