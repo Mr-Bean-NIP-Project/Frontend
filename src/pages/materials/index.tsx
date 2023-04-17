@@ -1,9 +1,13 @@
-import { Text } from "@mantine/core";
+import SearchBar from "@/components/shared/SearchBar";
+import { Container, Text } from "@mantine/core";
 
 export default function Materials() {
   return (
-    <>
-      <Text size="xl">Materials</Text>
-    </>
+    <Container fluid>
+      <Text size="2rem" weight={600}>
+        Raw Materials
+      </Text>
+      <SearchBar />
+    </Container>
   );
 }

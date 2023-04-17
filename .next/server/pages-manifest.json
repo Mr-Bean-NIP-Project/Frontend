@@ -2,7 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/suppliers": "pages/suppliers.js",
-  "/products": "pages/products.js",
-  "/materials": "pages/materials.js"
+  "/suppliers": "pages/suppliers.js"
 }
