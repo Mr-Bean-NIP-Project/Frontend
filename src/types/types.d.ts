@@ -1,13 +1,17 @@
 type Supplier = {
-    name: string;
+  name: string;
 }
 
 type Material = {
-    name: string;
-    // to add on
+  name: string;
+  // to add on
 }
 
 type Product = {
-    name: string;
-    // to add on
+  name: string;
+  // to add on
+}
+
+type ColumnArgument = {
+  [k: string]: any;
 }
