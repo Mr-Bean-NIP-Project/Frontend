@@ -114,7 +114,7 @@ const SideNavBar = () => {
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Text size="lg" weight={600}>
-            Mr Bean NIP Creator
+            NIP Creator
           </Text>
         </Group>
         {links}

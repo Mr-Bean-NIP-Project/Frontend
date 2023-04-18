@@ -6,10 +6,11 @@ import {
   Select,
   TextInput,
 } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
+import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
 import SelectIngredients from "./SelectIngredients";
+import LargeCreateButton from "../shared/LargeCreateButton";
+import CreateButtonInModal from "../shared/CreateButtonInModal";
 
 const CreateProductModal = () => {
   const [opened, setOpened] = useState(false);
@@ -17,13 +18,24 @@ const CreateProductModal = () => {
   const form = useForm({
     initialValues: {
       name: "",
+      serving_size: undefined,
       serving_unit: "g",
       serving_per_package: 1,
       ingredients: [],
     },
 
-    validate: {},
+    validate: {
+      name: isNotEmpty("Product name cannot be empty."),
+      serving_size: isNotEmpty("Service size cannot be empty."),
+      serving_unit: isNotEmpty("Service unit cannot be empty."),
+      serving_per_package: isNotEmpty("Service per package cannot be empty."),
+    },
   });
+
+  function handleClose() {
+    setOpened(false);
+    form.reset();
+  }
 
   const createProductFields = (
     <>
@@ -51,6 +63,12 @@ const CreateProductModal = () => {
             data={["g", "ml"]}
             label="Serving Unit"
             defaultValue={"g"}
+            transitionProps={{
+              transition: "scale-y",
+              duration: 150,
+              exitDuration: 80,
+              timingFunction: "ease",
+            }}
             {...form.getInputProps("unit")}
           />
         </Grid.Col>
@@ -74,20 +92,21 @@ const CreateProductModal = () => {
       <Modal
         size="xl"
         opened={opened}
-        onClose={() => setOpened(false)}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        onClose={handleClose}
         title="Create Product"
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           {createProductFields}
-          <Button fullWidth size="md" sx={{ marginTop: 20 }}>
-            Create
-          </Button>
+          <CreateButtonInModal />
         </form>
       </Modal>
 
-      <Button size="lg" leftIcon={<IconPlus />} onClick={() => setOpened(true)}>
-        Create Product
-      </Button>
+      <LargeCreateButton
+        title="Create Product"
+        onClick={() => setOpened(true)}
+      />
     </>
   );
 };

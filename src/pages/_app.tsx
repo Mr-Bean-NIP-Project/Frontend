@@ -5,7 +5,11 @@ import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{ fontFamily: "Inter, sans-serif", primaryColor: 'indigo' }}
+    >
       <AppShell navbar={<SideNavBar />}>
         <Component {...pageProps} />
       </AppShell>

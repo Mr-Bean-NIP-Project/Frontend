@@ -1,5 +1,4 @@
 import {
-  Button,
   Grid,
   Modal,
   NumberInput,
@@ -8,13 +7,19 @@ import {
   TextInput,
   Text,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconPlus } from "@tabler/icons-react";
+import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
 import { formatNutriText } from "../../../util";
+import LargeCreateButton from "../shared/LargeCreateButton";
+import CreateButtonInModal from "../shared/CreateButtonInModal";
 
 const CreateMaterialModal = () => {
   const [opened, setOpened] = useState(false);
+
+  const suppliers: Supplier[] = [
+    { id: 1, name: "Supplier ABC" },
+    { id: 2, name: "Supplier XYZ" },
+  ];
 
   const nutri: string[] = [
     "energy",
@@ -35,12 +40,20 @@ const CreateMaterialModal = () => {
   const form = useForm({
     initialValues: {
       name: "",
-      supplier: "",
+      supplier: undefined,
       ...nutriValues,
     },
 
-    validate: {},
+    validate: {
+      name: isNotEmpty("Material name cannot be empty."),
+      supplier: isNotEmpty("Supplier cannot be empty."),
+    },
   });
+
+  function handleClose() {
+    setOpened(false);
+    form.reset();
+  }
 
   const nutritionalFields: JSX.Element[] = [];
   nutri.forEach((val) => {
@@ -68,14 +81,25 @@ const CreateMaterialModal = () => {
           <TextInput
             size="md"
             label="Material Name"
+            placeholder="Material Name"
             {...form.getInputProps("name")}
           />
         </Grid.Col>
         <Grid.Col span={12}>
           <Select
             size="md"
-            data={[]}
+            data={suppliers.map((supplier) => supplier.name)}
             label="Supplier"
+            placeholder="Select Supplier"
+            nothingFound="No supplier found"
+            searchable
+            clearable
+            transitionProps={{
+              transition: "scale-y",
+              duration: 150,
+              exitDuration: 80,
+              timingFunction: "ease",
+            }}
             {...form.getInputProps("supplier")}
           />
         </Grid.Col>
@@ -94,20 +118,21 @@ const CreateMaterialModal = () => {
       <Modal
         size="xl"
         opened={opened}
-        onClose={() => setOpened(false)}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        onClose={handleClose}
         title="Create Material"
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           {createMaterialFields}
-          <Button fullWidth size="md" sx={{ marginTop: 20 }}>
-            Create
-          </Button>
+          <CreateButtonInModal />
         </form>
       </Modal>
 
-      <Button size="lg" leftIcon={<IconPlus />} onClick={() => setOpened(true)}>
-        Create Material
-      </Button>
+      <LargeCreateButton
+        title="Create Material"
+        onClick={() => setOpened(true)}
+      />
     </>
   );
 };

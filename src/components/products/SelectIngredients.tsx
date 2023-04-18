@@ -15,7 +15,9 @@ const SelectIngredients = () => {
   const [inputCount, setInputCount] = useState(1);
 
   const handleDelete = () => {
-    setInputCount(inputCount - 1);
+    if (inputCount > 1) {
+      setInputCount(inputCount - 1);
+    }
     // to change
   };
 
@@ -33,6 +35,7 @@ const SelectIngredients = () => {
             variant="light"
             color="pink"
             size="lg"
+            disabled={inputCount <= 1}
             onClick={handleDelete}
           >
             <IconTrash size="1.25rem" />

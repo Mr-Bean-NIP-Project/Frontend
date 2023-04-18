@@ -1,19 +1,15 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import { Container, Group, Text } from "@mantine/core";
 import CreateProductModal from "@/components/products/CreateProductModal";
-import SearchBar from "@/components/shared/SearchBar";
-
-const inter = Inter({ subsets: ["latin"] });
+import SharedSearchBar from "@/components/shared/SearchBar";
 
 export default function Products() {
   return (
     <>
       <Head>
-        <title>Mr Bean NIP</title>
-        <meta name="description" content="Mr Bean NIP" />
+        <title>Products - NIP Creator</title>
+        <meta name="description" content="NIP Creator" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <Container fluid>
@@ -23,7 +19,7 @@ export default function Products() {
             </Text>
             <CreateProductModal />
           </Group>
-          <SearchBar />
+          {/* <SharedSearchBar /> */}
         </Container>
       </main>
     </>

@@ -1,7 +1,9 @@
 import { Modal, Button, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { isNotEmpty, useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons-react";
 import React, { useState } from "react";
+import LargeCreateButton from "../shared/LargeCreateButton";
+import CreateButtonInModal from "../shared/CreateButtonInModal";
 
 const CreateSupplierModal = () => {
   const [opened, setOpened] = useState(false);
@@ -11,28 +13,41 @@ const CreateSupplierModal = () => {
       name: "",
     },
 
-    validate: {},
+    validate: {
+      name: isNotEmpty("Supplier name cannot be empty."),
+    },
   });
+
+  function handleClose() {
+    setOpened(false);
+    form.reset();
+  }
 
   return (
     <>
       <Modal
         size="lg"
         opened={opened}
-        onClose={() => setOpened(false)}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        onClose={handleClose}
         title="Create Supplier"
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            <TextInput size="md" label="Supplier Name" {...form.getInputProps("name")}/>
-          <Button fullWidth size="md" sx={{ marginTop: 20 }}>
-            Create
-          </Button>
+          <TextInput
+            size="md"
+            label="Supplier Name"
+            placeholder="Supplier Name"
+            {...form.getInputProps("name")}
+          />
+          <CreateButtonInModal />
         </form>
       </Modal>
 
-      <Button size="lg" leftIcon={<IconPlus />} onClick={() => setOpened(true)}>
-        Create Supplier
-      </Button>
+      <LargeCreateButton
+        title="Create Supplier"
+        onClick={() => setOpened(true)}
+      />
     </>
   );
 };
