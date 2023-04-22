@@ -6,6 +6,7 @@ import {
   getStylesRef,
   rem,
   Text,
+  useMantineTheme,
 } from "@mantine/core";
 import { IconPackage, IconAtom, IconBuildingStore } from "@tabler/icons-react";
 import { useRouter } from "next/router";
@@ -13,20 +14,20 @@ import Link from "next/link";
 import { LightDarkModeToggle } from "./LightDarkModeToggle";
 
 const useStyles = createStyles((theme) => ({
+  nav: {
+    backgroundColor: theme.colors.dark[5],
+  },
+
   header: {
     paddingBottom: theme.spacing.md,
     marginBottom: `calc(${theme.spacing.md} * 1.5)`,
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colors.dark[4]}`,
   },
 
   footer: {
     paddingTop: theme.spacing.md,
     marginTop: theme.spacing.md,
-    borderTop: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
-    }`,
+    borderTop: `${rem(1)} solid ${theme.colors.dark[4]}`,
   },
 
   link: {
@@ -35,47 +36,33 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     textDecoration: "none",
     fontSize: theme.fontSizes.sm,
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[1]
-        : theme.colors.gray[7],
+    color: theme.colors.dark[1],
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
     borderRadius: theme.radius.sm,
     fontWeight: 500,
 
     "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
-      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+      backgroundColor: theme.colors.dark[6],
+      color: theme.colors.gray[0],
 
       [`& .${getStylesRef("icon")}`]: {
-        color: theme.colorScheme === "dark" ? theme.white : theme.black,
+        color: theme.colors.gray[0],
       },
     },
   },
 
   linkIcon: {
     ref: getStylesRef("icon"),
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[2]
-        : theme.colors.gray[6],
+    color: theme.colors.dark[2],
     marginRight: theme.spacing.sm,
   },
 
   linkActive: {
     "&, &:hover": {
-      backgroundColor: theme.fn.variant({
-        variant: "light",
-        color: theme.primaryColor,
-      }).background,
-      color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-        .color,
+      backgroundColor: "rgba(76, 110, 245, 0.15)",
+      color: theme.colors.indigo[2],
       [`& .${getStylesRef("icon")}`]: {
-        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
-          .color,
+        color: theme.colors.indigo[2],
       },
     },
   },
@@ -89,6 +76,7 @@ const data = [
 
 const SideNavBar = () => {
   const { classes, cx } = useStyles();
+  const theme = useMantineTheme();
   const router = useRouter();
   const [active, setActive] = useState(router.asPath);
 
@@ -113,10 +101,10 @@ const SideNavBar = () => {
   useEffect(() => console.log(router.asPath.toString()), [router.asPath]);
 
   return (
-    <Navbar height="100vh" width={{ sm: 300 }} p="md">
+    <Navbar height="100vh" width={{ sm: 300 }} p="md" className={classes.nav}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <Text size="lg" weight={600}>
+          <Text size="lg" weight={600} color={theme.colors.gray[0]}>
             NIP Creator
           </Text>
           <LightDarkModeToggle />
