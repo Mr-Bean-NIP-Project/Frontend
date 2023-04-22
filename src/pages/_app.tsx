@@ -6,6 +6,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 
@@ -22,8 +23,13 @@ export default function App({ Component, pageProps }: AppProps) {
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
-        theme={{ fontFamily: "Inter, sans-serif", primaryColor: "indigo", colorScheme}}
+        theme={{
+          fontFamily: "Inter, sans-serif",
+          primaryColor: "indigo",
+          colorScheme,
+        }}
       >
+        <Notifications />
         <AppShell navbar={<SideNavBar />}>
           <Component {...pageProps} />
         </AppShell>

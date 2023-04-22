@@ -1,20 +1,65 @@
-import { ActionIcon, Button, useMantineTheme } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Popover,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
-import React from "react";
+import React, { useState } from "react";
 
-const DeleteActionButton = () => {
+interface DeleteActionButtonProps {
+  onDelete(): void;
+  itemName: string;
+}
+
+const DeleteActionButton = ({
+  onDelete,
+  itemName,
+}: DeleteActionButtonProps) => {
   const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
+
+  function handleDelete() {
+    onDelete();
+    setOpened(false);
+  }
 
   return (
-    <ActionIcon
-      size="lg"
-      radius="md"
-      color="pink"
-      variant={theme.colorScheme === "light" ? "outline" : "light"}
-      sx={{ border: "1.5px solid" }}
+    <Popover
+      opened={opened}
+      onChange={setOpened}
+      width={"200"}
+      position="bottom"
+      withArrow
+      shadow="md"
     >
-      <IconTrash size={"1.25rem"} />
-    </ActionIcon>
+      <Popover.Target>
+        <ActionIcon
+          size="lg"
+          radius="md"
+          color="pink"
+          variant={theme.colorScheme === "light" ? "outline" : "light"}
+          sx={{ border: "1.5px solid" }}
+          onClick={() => setOpened((o) => !o)}
+        >
+          <IconTrash size={"1.25rem"} />
+        </ActionIcon>
+      </Popover.Target>
+
+      <Popover.Dropdown>
+        <Text>Delete {itemName}?</Text>
+        <Group position="left">
+          <Button color="gray" onClick={() => setOpened(false)}>
+            No
+          </Button>
+          <Button color="pink" onClick={handleDelete}>
+            Yes
+          </Button>
+        </Group>
+      </Popover.Dropdown>
+    </Popover>
   );
 };
 

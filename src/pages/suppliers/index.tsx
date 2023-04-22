@@ -2,14 +2,19 @@ import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateSupplierModal from "@/components/suppliers/CreateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
 import { Container, Group, Text } from "@mantine/core";
+import axios from "axios";
 import Head from "next/head";
 import { useState } from "react";
 
-export default function Suppliers() {
-  const suppliers: Supplier[] = [
-    { id: 101, name: "Supplier ABC" },
-    { id: 102, name: "Supplier XYZ" },
-  ];
+interface SuppliersProps {
+  suppliers: Supplier[];
+}
+
+export default function Suppliers({ suppliers }: SuppliersProps) {
+  // const suppliers: Supplier[] = [
+  //   { id: 101, name: "Supplier ABC" },
+  //   { id: 102, name: "Supplier XYZ" },
+  // ];
 
   const [searchResults, setSearchResults] = useState(suppliers);
 
@@ -46,4 +51,12 @@ export default function Suppliers() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/supplier`
+  );
+  const data = await response.data;
+  return { props: { suppliers: data } };
 }
