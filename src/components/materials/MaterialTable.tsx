@@ -1,9 +1,6 @@
-import { Button, Table } from "@mantine/core";
-import { IconNotes } from "@tabler/icons-react";
-
+import { Group, Table, createStyles } from "@mantine/core";
 import { useMemo } from "react";
-import ViewMaterialDetailModal from "./ViewMaterialDetailModal";
-
+import DeleteActionButton from "../shared/DeleteActionButton";
 interface MaterialTableProps {
   materials: Material[];
 }
@@ -16,7 +13,9 @@ const MaterialTable = ({ materials }: MaterialTableProps) => {
           <td width="15%">{material.id}</td>
           <td>{material.name}</td>
           <td width="10%">
-            <ViewMaterialDetailModal material={material} />
+            <Group position="right">
+              <DeleteActionButton />
+            </Group>
           </td>
         </tr>
       )),
@@ -36,7 +35,9 @@ const MaterialTable = ({ materials }: MaterialTableProps) => {
         <tr>
           <th>Material ID</th>
           <th>Material Name</th>
-          <th>Actions</th>
+          <th>
+            <Group position="right">Actions</Group>
+          </th>
         </tr>
       </thead>
       <tbody>{rows}</tbody>

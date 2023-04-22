@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createStyles,
   Navbar,
@@ -10,6 +10,7 @@ import {
 import { IconPackage, IconAtom, IconBuildingStore } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { LightDarkModeToggle } from "./LightDarkModeToggle";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -88,19 +89,19 @@ const data = [
 
 const SideNavBar = () => {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState(data[0].label);
   const router = useRouter();
+  const [active, setActive] = useState(router.asPath);
 
   const links = data.map((item) => (
     <Link
       className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
+        [classes.linkActive]: router.asPath === item.link,
       })}
       href={item.link}
-      key={item.label}
+      key={item.link}
       onClick={(event) => {
         event.preventDefault();
-        setActive(item.label);
+        setActive(item.link);
         router.push(item.link);
       }}
     >
@@ -109,6 +110,8 @@ const SideNavBar = () => {
     </Link>
   ));
 
+  useEffect(() => console.log(router.asPath.toString()), [router.asPath]);
+
   return (
     <Navbar height="100vh" width={{ sm: 300 }} p="md">
       <Navbar.Section grow>
@@ -116,6 +119,7 @@ const SideNavBar = () => {
           <Text size="lg" weight={600}>
             NIP Creator
           </Text>
+          <LightDarkModeToggle />
         </Group>
         {links}
       </Navbar.Section>

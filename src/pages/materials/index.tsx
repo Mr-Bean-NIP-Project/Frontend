@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function Materials() {
   const materials: Material[] = [
     {
-      id: 1,
+      id: 91,
       name: "Aiyu Jelly",
       energy: "0",
       protein: "0",
@@ -20,10 +20,10 @@ export default function Materials() {
       sugars: "0",
       dietary_fibre: "0",
       sodium: "0",
-      supplier_id: 1,
+      supplier_id: 101,
     },
     {
-      id: 2,
+      id: 92,
       name: "Water from Swiss Alps",
       energy: "0",
       protein: "0",
@@ -35,7 +35,7 @@ export default function Materials() {
       sugars: "0",
       dietary_fibre: "0",
       sodium: "0",
-      supplier_id: 1,
+      supplier_id: 102,
     },
   ];
 

@@ -7,8 +7,8 @@ import { useState } from "react";
 
 export default function Suppliers() {
   const suppliers: Supplier[] = [
-    { id: 1, name: "Supplier ABC" },
-    { id: 2, name: "Supplier XYZ" },
+    { id: 101, name: "Supplier ABC" },
+    { id: 102, name: "Supplier XYZ" },
   ];
 
   const [searchResults, setSearchResults] = useState(suppliers);

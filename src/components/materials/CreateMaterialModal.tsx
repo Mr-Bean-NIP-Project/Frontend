@@ -6,6 +6,7 @@ import {
   Table,
   TextInput,
   Text,
+  Group,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
@@ -34,6 +35,8 @@ const CreateMaterialModal = () => {
     "sodium",
   ];
 
+  const wholeNumNutrients = ["energy", "sodium", "cholesterol"];
+
   const nutriValues: ColumnArgument = {};
   nutri.forEach((val) => (nutriValues[val] = 0));
 
@@ -56,19 +59,26 @@ const CreateMaterialModal = () => {
   }
 
   const nutritionalFields: JSX.Element[] = [];
-  nutri.forEach((val) => {
-    const nutriText = formatNutriText(val);
+  nutri.forEach((nutrient) => {
+    const nutriText = formatNutriText(nutrient);
     nutritionalFields.push(
-      <tr key={val}>
+      <tr key={nutrient}>
         <td>{nutriText}</td>
         <td>
-          <NumberInput
-            key={val}
-            placeholder={nutriText}
-            size="sm"
-            min={0}
-            {...form.getInputProps(val)}
-          />
+          <Group position="right">
+            <NumberInput
+              precision={wholeNumNutrients.includes(nutrient) ? 0 : 1}
+              key={nutrient}
+              placeholder={nutriText}
+              size="sm"
+              min={0}
+              sx={{
+                width: "50%",
+                input: { textAlign: "right", paddingRight: "2.25rem" },
+              }}
+              {...form.getInputProps(nutrient)}
+            />
+          </Group>
         </td>
       </tr>
     );

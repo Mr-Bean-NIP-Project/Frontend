@@ -2,17 +2,22 @@ import { Group, Table } from "@mantine/core";
 import { useMemo } from "react";
 import DeleteActionButton from "../shared/DeleteActionButton";
 
-interface SupplierTableProps {
-  suppliers: Supplier[];
+interface ProductTableProps {
+  products: Product[];
 }
 
-const SupplierTable = ({ suppliers }: SupplierTableProps) => {
+const ProductTable = ({ products }: ProductTableProps) => {
   const rows = useMemo(
     () =>
-      suppliers.map((supplier) => (
-        <tr key={supplier.id}>
-          <td width="15%">{supplier.id}</td>
-          <td>{supplier.name}</td>
+      products.map((product) => (
+        <tr key={product.id}>
+          <td width="15%">{product.id}</td>
+          <td>{product.name}</td>
+          <td width="10%">
+            <Group position="right">
+              {product.serving_size} {product.serving_unit}
+            </Group>
+          </td>
           <td width="10%">
             <Group position="right">
               <DeleteActionButton />
@@ -20,7 +25,7 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
           </td>
         </tr>
       )),
-    [suppliers]
+    [products]
   );
 
   return (
@@ -34,8 +39,11 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
     >
       <thead>
         <tr>
-          <th>Supplier ID</th>
-          <th>Supplier Name</th>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th>
+            <Group position="right">Serving Size</Group>
+          </th>
           <th>
             <Group position="right">Actions</Group>
           </th>
@@ -46,4 +54,4 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
   );
 };
 
-export default SupplierTable;
+export default ProductTable;

@@ -1,18 +1,33 @@
 import SideNavBar from "@/components/shared/SideNavBar";
 import "@/styles/globals.css";
-import { AppShell, MantineProvider } from "@mantine/core";
+import {
+  AppShell,
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
 import type { AppProps } from "next/app";
+import { useState } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      theme={{ fontFamily: "Inter, sans-serif", primaryColor: 'indigo' }}
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
     >
-      <AppShell navbar={<SideNavBar />}>
-        <Component {...pageProps} />
-      </AppShell>
-    </MantineProvider>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{ fontFamily: "Inter, sans-serif", primaryColor: "indigo", colorScheme}}
+      >
+        <AppShell navbar={<SideNavBar />}>
+          <Component {...pageProps} />
+        </AppShell>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
