@@ -1,7 +1,7 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { useState } from "react";
 import { formatNutriText } from "../../../util";
-import ViewActionButton from "../shared/ViewActionButton";
+import ViewActionButton from "./ViewActionButton";
 
 const useStyles = createStyles((theme) => ({
   nutrientTitle: {
