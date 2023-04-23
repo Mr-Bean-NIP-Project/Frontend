@@ -1,9 +1,11 @@
 import Head from "next/head";
 import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import { Container, Group, Text } from "@mantine/core";
+import { Box, Container, Group, Text } from "@mantine/core";
 import MaterialTable from "@/components/materials/MaterialTable";
 import { useState } from "react";
+import DimmedMessage from "@/components/shared/DimmedMessage";
+import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 
 export default function Materials() {
   const materials: Material[] = [
@@ -40,8 +42,19 @@ export default function Materials() {
   ];
 
   const [searchResults, setSearchResults] = useState(materials);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const headerText: string = isSearching
+    ? `Showing ${searchResults.length} of ${materials.length} raw material(s)`
+    : `Raw Materials (${materials.length})`;
 
   const handleSearch = (searchStr: string) => {
+    if (searchStr.length === 0) {
+      setIsSearching(false);
+      setSearchResults(materials);
+      return;
+    }
+    setIsSearching(true);
     // search by id or name
     const results = materials.filter(
       (material) =>
@@ -52,6 +65,18 @@ export default function Materials() {
     );
     setSearchResults(results);
   };
+
+  function renderBody() {
+    if (searchResults.length === 0) {
+      if (isSearching) {
+        return <NoSearchResultsMessage />;
+      }
+      const title = "No raw materials created";
+      const subtitle = "Click 'Create Material' to create a new raw material!";
+      return <DimmedMessage title={title} subtitle={subtitle} />;
+    }
+    return <MaterialTable materials={searchResults} />;
+  }
 
   return (
     <>
@@ -64,12 +89,12 @@ export default function Materials() {
         <Container fluid>
           <Group position="apart">
             <Text size="2rem" weight={600}>
-              Raw Materials
+              {headerText}
             </Text>
             <CreateMaterialModal />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
-          <MaterialTable materials={searchResults} />
+          <Box>{renderBody()}</Box>
         </Container>
       </main>
     </>

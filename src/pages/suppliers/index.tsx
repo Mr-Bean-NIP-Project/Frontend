@@ -1,13 +1,13 @@
+import DimmedMessage from "@/components/shared/DimmedMessage";
+import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateSupplierModal from "@/components/suppliers/CreateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
-import { Container, Group, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { Box, Center, Container, Group, Text } from "@mantine/core";
 import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();
@@ -26,8 +26,19 @@ export default function Suppliers() {
   useEffect(() => setSearchResults(suppliers), [suppliers]);
 
   const [searchResults, setSearchResults] = useState(suppliers);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const headerText: string = isSearching
+    ? `Showing ${searchResults.length} of ${suppliers.length} supplier(s)`
+    : `Suppliers (${suppliers.length})`;
 
   const handleSearch = (searchStr: string) => {
+    if (searchStr.length === 0) {
+      setIsSearching(false);
+      setSearchResults(suppliers);
+      return;
+    }
+    setIsSearching(true);
     // search by id or name
     const results = suppliers.filter(
       (supplier: any) =>
@@ -38,6 +49,18 @@ export default function Suppliers() {
     );
     setSearchResults(results);
   };
+
+  function renderBody() {
+    if (searchResults.length === 0) {
+      if (isSearching) {
+        return <NoSearchResultsMessage />;
+      }
+      const title = "No suppliers created";
+      const subtitle = "Click 'Create Supplier' to create a new supplier!";
+      return <DimmedMessage title={title} subtitle={subtitle} />;
+    }
+    return <SupplierTable suppliers={searchResults} />;
+  }
 
   return (
     <>
@@ -50,22 +73,14 @@ export default function Suppliers() {
         <Container fluid>
           <Group position="apart">
             <Text size="2rem" weight={600}>
-              Suppliers
+              {headerText}
             </Text>
             <CreateSupplierModal />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
-          <SupplierTable suppliers={searchResults} />
+          <Box>{renderBody()}</Box>
         </Container>
       </main>
     </>
   );
 }
-
-// export async function getServerSideProps() {
-//   const response = await axios.get(
-//     `${process.env.NEXT_PUBLIC_API_URL}/supplier`
-//   );
-//   const data = await response.data;
-//   return { props: { suppliers: data } };
-// }

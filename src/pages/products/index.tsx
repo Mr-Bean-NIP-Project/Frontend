@@ -1,9 +1,11 @@
 import Head from "next/head";
-import { Container, Group, Text } from "@mantine/core";
+import { Box, Container, Group, Text } from "@mantine/core";
 import CreateProductModal from "@/components/products/CreateProductModal";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import { useState } from "react";
 import ProductTable from "@/components/products/ProductTable";
+import DimmedMessage from "@/components/shared/DimmedMessage";
+import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 
 const products: Product[] = [
   {
@@ -26,8 +28,19 @@ const products: Product[] = [
 
 export default function Products() {
   const [searchResults, setSearchResults] = useState(products);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const headerText: string = isSearching
+    ? `Showing ${searchResults.length} of ${products.length} product(s)`
+    : `Products (${products.length})`;
 
   const handleSearch = (searchStr: string) => {
+    if (searchStr.length === 0) {
+      setIsSearching(false);
+      setSearchResults(products);
+      return;
+    }
+    setIsSearching(true);
     // search by id or name
     const results = products.filter(
       (product) =>
@@ -37,6 +50,18 @@ export default function Products() {
           searchStr.length <= product.id.toString().length)
     );
     setSearchResults(results);
+  };
+
+  function renderBody() {
+    if (searchResults.length === 0) {
+      if (isSearching) {
+        return <NoSearchResultsMessage />;
+      }
+      const title = "No products created";
+      const subtitle = "Click 'Create Product' to create a new product!";
+      return <DimmedMessage title={title} subtitle={subtitle} />;
+    }
+    return <ProductTable products={searchResults} />;
   };
 
   return (
@@ -50,12 +75,12 @@ export default function Products() {
         <Container fluid>
           <Group position="apart">
             <Text size="2rem" weight={600}>
-              Products
+              {headerText}
             </Text>
             <CreateProductModal />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
-          <ProductTable products={searchResults} />
+          <Box>{renderBody()}</Box>
         </Container>
       </main>
     </>

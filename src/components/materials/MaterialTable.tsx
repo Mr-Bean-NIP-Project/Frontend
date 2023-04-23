@@ -14,7 +14,9 @@ const MaterialTable = ({ materials }: MaterialTableProps) => {
           <td>{material.name}</td>
           <td width="10%">
             <Group position="right">
-              <DeleteActionButton />
+              <DeleteActionButton onDelete={function (): void {
+                throw new Error("Function not implemented.");
+              } } itemName={""} />
             </Group>
           </td>
         </tr>

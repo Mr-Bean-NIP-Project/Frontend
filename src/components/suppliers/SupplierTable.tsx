@@ -1,5 +1,5 @@
 import { Group, Table } from "@mantine/core";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
@@ -20,7 +20,7 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
       ).data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["supplier", data.id] });
+      queryClient.invalidateQueries({ queryKey: ["supplier"] });
       notifications.show({
         title: "Delete Successful",
         color: "green",
@@ -30,9 +30,12 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
     },
   });
 
-  const handleDelete = (id: any) => {
-    mutation.mutate(id);
-  };
+  const handleDelete = useCallback(
+    (id: any) => {
+      mutation.mutate(id);
+    },
+    [mutation]
+  );
 
   const rows = useMemo(
     () =>
@@ -50,7 +53,7 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
           </td>
         </tr>
       )),
-    [suppliers]
+    [suppliers, handleDelete]
   );
 
   return (
