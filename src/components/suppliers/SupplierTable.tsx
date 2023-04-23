@@ -4,39 +4,35 @@ import DeleteActionButton from "../shared/DeleteActionButton";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
+import { useMutation, useQueryClient } from "react-query";
 
 interface SupplierTableProps {
   suppliers: Supplier[];
 }
 
 const SupplierTable = ({ suppliers }: SupplierTableProps) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (id: any) => {
+      return (
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/supplier/${id}`)
+      ).data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["supplier", data.id] });
+      notifications.show({
+        title: "Delete Successful",
+        color: "green",
+        icon: <IconCheck />,
+        message: `Supplier ${data.name} has been deleted.`,
+      });
+    },
+  });
 
   const handleDelete = (id: any) => {
-    deleteSupplier(id);
-  }
-
-  async function deleteSupplier(id: any) {
-    const response = await axios
-      .delete(`${process.env.NEXT_PUBLIC_API_URL}/supplier/${id}`)
-      .then((response) =>
-        notifications.show({
-          title: "Delete Successful",
-          color: "green",
-          icon: <IconCheck />,
-          message: `Supplier ${response.data.name} has been deleted.`,
-        })
-      )
-      .catch((error) => {
-        if (error.response) {
-          notifications.show({
-            title: "Error Deleting Supplier",
-            color: "red",
-            icon: <IconX />,
-            message: error.response.data.message,
-          });
-        }
-      });
-  }
+    mutation.mutate(id);
+  };
 
   const rows = useMemo(
     () =>
@@ -46,7 +42,10 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
           <td>{supplier.name}</td>
           <td width="10%">
             <Group position="right">
-              <DeleteActionButton itemName={supplier.name} onDelete={() => handleDelete(supplier.id)} />
+              <DeleteActionButton
+                itemName={supplier.name}
+                onDelete={() => handleDelete(supplier.id)}
+              />
             </Group>
           </td>
         </tr>

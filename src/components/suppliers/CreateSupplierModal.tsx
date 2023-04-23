@@ -12,9 +12,11 @@ import LargeCreateButton from "../shared/LargeCreateButton";
 import CreateButtonInModal from "../shared/CreateButtonInModal";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
+import { useMutation, useQueryClient } from "react-query";
 
 const CreateSupplierModal = () => {
   const [opened, setOpened] = useState(false);
+  const queryClient = useQueryClient();
 
   const form = useForm({
     initialValues: {
@@ -31,36 +33,41 @@ const CreateSupplierModal = () => {
     form.reset();
   }
 
+  const mutation = useMutation({
+    mutationFn: async (newSupplier: Supplier) => {
+      return (
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/supplier`,
+          newSupplier
+        )
+      ).data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["supplier"] });
+      notifications.show({
+        title: "Create Successful",
+        color: "green",
+        icon: <IconCheck />,
+        message: `New supplier ${data.name} of id: ${data.id} created!`,
+      });
+    },
+    onError: (error: any) => {
+      notifications.show({
+        title: "Error Creating Supplier",
+        color: "red",
+        icon: <IconX />,
+        message: error.response.data.message,
+      });
+    },
+  });
+
   function handleSubmit(values: any) {
     console.log(values);
     const newSupplier: Supplier = {
       name: values.name,
     };
-    createSupplier(newSupplier);
+    mutation.mutate(newSupplier);
     handleClose();
-  }
-
-  async function createSupplier(newSupplier: Supplier) {
-    const response = await axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/supplier`, newSupplier)
-      .then((response) =>
-        notifications.show({
-          title: "Create Successful",
-          color: "green",
-          icon: <IconCheck />,
-          message: `New supplier ${response.data.name} of id: ${response.data.id} created!`,
-        })
-      )
-      .catch((error) => {
-        if (error.response) {
-          notifications.show({
-            title: "Error Creating Supplier",
-            color: "red",
-            icon: <IconX />,
-            message: error.response.data.message,
-          });
-        }
-      });
   }
 
   return (
