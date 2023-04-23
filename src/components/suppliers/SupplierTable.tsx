@@ -1,10 +1,11 @@
 import { Group, Table } from "@mantine/core";
-import { useCallback, useMemo } from "react";
-import DeleteActionButton from "../shared/DeleteActionButton";
-import axios from "axios";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { IconCheck } from "@tabler/icons-react";
+import axios from "axios";
+import { useCallback, useMemo } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import DeleteActionButton from "../shared/DeleteActionButton";
+import EditActionButton from "../shared/EditActionButton";
 
 interface SupplierTableProps {
   suppliers: Supplier[];
@@ -48,6 +49,11 @@ const SupplierTable = ({ suppliers }: SupplierTableProps) => {
               <DeleteActionButton
                 itemName={supplier.name}
                 onDelete={() => handleDelete(supplier.id)}
+              />
+              <EditActionButton
+                onClick={function (): void {
+                  throw new Error("Function not implemented.");
+                }}
               />
             </Group>
           </td>

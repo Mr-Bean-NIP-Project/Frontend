@@ -1,11 +1,11 @@
-import Head from "next/head";
 import { Box, Container, Group, Text } from "@mantine/core";
-import CreateProductModal from "@/components/products/CreateProductModal";
-import SharedSearchBar from "@/components/shared/SearchBar";
+import Head from "next/head";
 import { useState } from "react";
+import CreateProductModal from "@/components/products/CreateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
+import SharedSearchBar from "@/components/shared/SearchBar";
 
 const products: Product[] = [
   {
@@ -62,7 +62,7 @@ export default function Products() {
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
     return <ProductTable products={searchResults} />;
-  };
+  }
 
   return (
     <>

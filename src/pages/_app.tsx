@@ -1,4 +1,3 @@
-import SideNavBar from "@/components/shared/SideNavBar";
 import "@/styles/globals.css";
 import {
   AppShell,
@@ -7,9 +6,10 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import type { AppProps } from "next/app";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import SideNavBar from "@/components/shared/SideNavBar";
+import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");

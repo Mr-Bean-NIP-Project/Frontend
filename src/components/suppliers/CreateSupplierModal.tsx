@@ -1,18 +1,12 @@
-import { Modal, Button, TextInput } from "@mantine/core";
+import { Modal, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import {
-  IconAlertCircle,
-  IconAlertCircleFilled,
-  IconCheck,
-  IconPlus,
-  IconX,
-} from "@tabler/icons-react";
-import React, { useState } from "react";
-import LargeCreateButton from "../shared/LargeCreateButton";
-import CreateButtonInModal from "../shared/CreateButtonInModal";
-import axios from "axios";
 import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import axios from "axios";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import CreateButtonInModal from "../shared/CreateButtonInModal";
+import LargeCreateButton from "../shared/LargeCreateButton";
 
 const CreateSupplierModal = () => {
   const [opened, setOpened] = useState(false);

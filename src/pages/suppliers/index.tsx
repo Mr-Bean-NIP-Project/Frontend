@@ -1,13 +1,13 @@
+import { Box, Container, Group, Text } from "@mantine/core";
+import axios from "axios";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateSupplierModal from "@/components/suppliers/CreateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
-import { Box, Center, Container, Group, Text } from "@mantine/core";
-import axios from "axios";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();

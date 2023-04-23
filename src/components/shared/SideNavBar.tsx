@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   createStyles,
   Navbar,
@@ -9,8 +8,9 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconPackage, IconAtom, IconBuildingStore } from "@tabler/icons-react";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { LightDarkModeToggle } from "./LightDarkModeToggle";
 
 const useStyles = createStyles((theme) => ({

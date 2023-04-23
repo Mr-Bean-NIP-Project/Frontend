@@ -8,9 +8,9 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
-import SelectIngredients from "./SelectIngredients";
-import LargeCreateButton from "../shared/LargeCreateButton";
 import CreateButtonInModal from "../shared/CreateButtonInModal";
+import LargeCreateButton from "../shared/LargeCreateButton";
+import SelectIngredients from "./SelectIngredients";
 
 const CreateProductModal = () => {
   const [opened, setOpened] = useState(false);

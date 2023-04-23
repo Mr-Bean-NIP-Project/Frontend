@@ -11,8 +11,8 @@ import {
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
 import { formatNutriText } from "../../../util";
-import LargeCreateButton from "../shared/LargeCreateButton";
 import CreateButtonInModal from "../shared/CreateButtonInModal";
+import LargeCreateButton from "../shared/LargeCreateButton";
 
 const CreateMaterialModal = () => {
   const [opened, setOpened] = useState(false);

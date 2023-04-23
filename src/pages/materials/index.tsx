@@ -1,11 +1,11 @@
-import Head from "next/head";
-import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
-import SharedSearchBar from "@/components/shared/SearchBar";
 import { Box, Container, Group, Text } from "@mantine/core";
-import MaterialTable from "@/components/materials/MaterialTable";
+import Head from "next/head";
 import { useState } from "react";
+import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
+import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
+import SharedSearchBar from "@/components/shared/SearchBar";
 
 export default function Materials() {
   const materials: Material[] = [
