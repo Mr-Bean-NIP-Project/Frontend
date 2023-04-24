@@ -8,7 +8,7 @@ import {
   Text,
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const SelectIngredients = () => {
   // const [ingredients, setIngredients] = useState([]);

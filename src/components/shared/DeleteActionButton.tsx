@@ -7,7 +7,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface DeleteActionButtonProps {
   onDelete(): void;

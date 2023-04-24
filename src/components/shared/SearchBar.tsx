@@ -1,4 +1,4 @@
-import { ActionIcon, Button, TextInput } from "@mantine/core";
+import { ActionIcon, TextInput } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import React, { useState } from "react";
 

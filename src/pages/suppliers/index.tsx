@@ -1,4 +1,4 @@
-import { Box, Container, Group, Modal, Text } from "@mantine/core";
+import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
@@ -19,9 +19,8 @@ export default function Suppliers() {
 
   const {
     isLoading,
-    isError,
+    isFetching,
     data: suppliers = [],
-    error,
   } = useQuery({
     queryKey: ["supplier"],
     queryFn: async () =>
@@ -131,7 +130,10 @@ export default function Suppliers() {
             />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
-          <Box>{renderBody()}</Box>
+          <Box style={{ position: "relative", minHeight: "70vh" }}>
+            <LoadingOverlay visible={isLoading || isFetching} overlayBlur={2} />
+            {renderBody()}
+          </Box>
         </Container>
       </main>
     </>
