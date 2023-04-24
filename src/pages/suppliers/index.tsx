@@ -1,17 +1,17 @@
 import { Box, Container, Group, Modal, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import DimmedMessage from "@/components/shared/DimmedMessage";
+import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
 import { ModalStateEnum } from "@/types/constants";
-import LargeCreateButton from "@/components/shared/LargeCreateButton";
-import { notifications } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons-react";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();

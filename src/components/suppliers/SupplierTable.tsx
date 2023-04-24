@@ -14,7 +14,7 @@ interface SupplierTableProps {
   onDelete(id?: number): void;
 }
 
-const SupplierTable = ({ suppliers, onEdit, onDelete}: SupplierTableProps) => {
+const SupplierTable = ({ suppliers, onEdit, onDelete }: SupplierTableProps) => {
   const queryClient = useQueryClient();
 
   const rows = useMemo(
@@ -34,7 +34,7 @@ const SupplierTable = ({ suppliers, onEdit, onDelete}: SupplierTableProps) => {
           </td>
         </tr>
       )),
-    [suppliers, onDelete]
+    [suppliers, onDelete, onEdit]
   );
 
   return (

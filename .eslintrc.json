@@ -23,6 +23,7 @@
         "endOfLine": "auto"
       }
     ],
+    "react-hooks/exhaustive-deps": "off",
     "react/react-in-jsx-scope": "off",
     "arrow-body-style": "off",
     "prefer-arrow-callback": "off",

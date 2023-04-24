@@ -3,11 +3,11 @@ import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import SubmitButtonInModal from "../shared/SubmitButtonInModal";
-import LargeCreateButton from "../shared/LargeCreateButton";
 import { ModalStateEnum } from "@/types/constants";
+import LargeCreateButton from "../shared/LargeCreateButton";
+import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
 interface CreateUpdateSupplierModalProps {
   supplierToUpdate?: Supplier;
@@ -40,15 +40,19 @@ const CreateUpdateSupplierModal = ({
     },
   });
 
+  const prepopulateFormFields = () => {
+    console.log(supplierToUpdate);
+    if (supplierToUpdate) {
+      form.setFieldValue("name", supplierToUpdate.name ?? "");
+    }
+  };
+
   function handleClose() {
     onClose();
     form.reset();
   }
 
-  useEffect(
-    () => form.setFieldValue("name", supplierToUpdate?.name ?? ""),
-    [supplierToUpdate]
-  );
+  useEffect(() => prepopulateFormFields(), [supplierToUpdate]);
 
   const createMutation = useMutation({
     mutationFn: async (newSupplier: Supplier) => {

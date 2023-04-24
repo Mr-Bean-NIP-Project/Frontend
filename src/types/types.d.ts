@@ -48,5 +48,5 @@ type ColumnArgument = {
 
 export enum ModalStateEnum {
   Create,
-  Update
+  Update,
 }
