@@ -12,6 +12,7 @@ import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
 import { ModalStateEnum } from "@/types/constants";
+import { Supplier } from "@/types/types";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();

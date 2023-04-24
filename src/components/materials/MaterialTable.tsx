@@ -1,5 +1,6 @@
 import { Group, Table, createStyles } from "@mantine/core";
 import { useMemo } from "react";
+import { Material } from "@/types/types";
 import DeleteActionButton from "../shared/DeleteActionButton";
 interface MaterialTableProps {
   materials: Material[];

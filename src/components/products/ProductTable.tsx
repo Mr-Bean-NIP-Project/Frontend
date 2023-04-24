@@ -1,5 +1,6 @@
 import { Group, Table } from "@mantine/core";
 import { useMemo } from "react";
+import { Product } from "@/types/types";
 import DeleteActionButton from "../shared/DeleteActionButton";
 
 interface ProductTableProps {

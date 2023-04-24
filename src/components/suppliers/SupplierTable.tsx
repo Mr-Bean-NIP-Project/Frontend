@@ -4,6 +4,7 @@ import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
 import { useCallback, useMemo } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { Supplier } from "@/types/types";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
 import CreateUpdateSupplierModal from "./CreateUpdateSupplierModal";

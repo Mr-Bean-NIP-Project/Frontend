@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
+import { ColumnArgument, Supplier } from "@/types/types";
 import { formatNutriText } from "../../../util";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";

@@ -6,6 +6,7 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { ModalStateEnum } from "@/types/constants";
+import { Supplier } from "@/types/types";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 

@@ -1,5 +1,6 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { useState } from "react";
+import { Material } from "@/types/types";
 import { formatNutriText } from "../../../util";
 import ViewActionButton from "./ViewActionButton";
 
