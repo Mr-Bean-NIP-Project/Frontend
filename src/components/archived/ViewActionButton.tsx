@@ -1,6 +1,5 @@
 import { ActionIcon, useMantineTheme } from "@mantine/core";
 import { IconNotes } from "@tabler/icons-react";
-import React from "react";
 
 interface ViewActionButtonProps {
   onClick(): void;
