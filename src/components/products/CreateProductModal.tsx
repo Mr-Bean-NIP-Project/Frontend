@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
-import CreateButtonInModal from "../shared/CreateButtonInModal";
+import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SelectIngredients from "./SelectIngredients";
 
@@ -99,7 +99,7 @@ const CreateProductModal = () => {
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           {createProductFields}
-          <CreateButtonInModal />
+          <SubmitButtonInModal title="Create" />
         </form>
       </Modal>
 

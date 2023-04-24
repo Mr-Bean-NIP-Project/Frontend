@@ -98,8 +98,6 @@ const SideNavBar = () => {
     </Link>
   ));
 
-  useEffect(() => console.log(router.asPath.toString()), [router.asPath]);
-
   return (
     <Navbar height="100vh" width={{ sm: 300 }} p="md" className={classes.nav}>
       <Navbar.Section grow>

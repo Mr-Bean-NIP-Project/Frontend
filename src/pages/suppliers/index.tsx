@@ -1,13 +1,17 @@
-import { Box, Container, Group, Text } from "@mantine/core";
+import { Box, Container, Group, Modal, Text } from "@mantine/core";
 import axios from "axios";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useCallback, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import CreateSupplierModal from "@/components/suppliers/CreateSupplierModal";
+import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
+import { ModalStateEnum } from "@/types/constants";
+import LargeCreateButton from "@/components/shared/LargeCreateButton";
+import { notifications } from "@mantine/notifications";
+import { IconCheck } from "@tabler/icons-react";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();
@@ -27,6 +31,10 @@ export default function Suppliers() {
 
   const [searchResults, setSearchResults] = useState(suppliers);
   const [isSearching, setIsSearching] = useState(false);
+  const [modalState, setModalState] = useState<ModalStateEnum>(
+    ModalStateEnum.Hidden
+  );
+  const [supplierToUpdate, setSupplierToUpdate] = useState<Supplier>();
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${suppliers.length} supplier(s)`
@@ -50,6 +58,36 @@ export default function Suppliers() {
     setSearchResults(results);
   };
 
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return (
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/supplier/${id}`)
+      ).data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["supplier"] });
+      notifications.show({
+        title: "Delete Successful",
+        color: "green",
+        icon: <IconCheck />,
+        message: `Supplier ${data.name} has been deleted.`,
+      });
+    },
+  });
+
+  const handleDelete = useCallback(
+    (id: number) => {
+      deleteMutation.mutate(id);
+    },
+    [deleteMutation]
+  );
+
+  function handleEdit(supplier: Supplier) {
+    if (!supplier) return;
+    setModalState(ModalStateEnum.Update);
+    setSupplierToUpdate(supplier);
+  }
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -59,7 +97,13 @@ export default function Suppliers() {
       const subtitle = "Click 'Create Supplier' to create a new supplier!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
-    return <SupplierTable suppliers={searchResults} />;
+    return (
+      <SupplierTable
+        suppliers={searchResults}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+    );
   }
 
   return (
@@ -75,7 +119,15 @@ export default function Suppliers() {
             <Text size="2rem" weight={600}>
               {headerText}
             </Text>
-            <CreateSupplierModal />
+            <LargeCreateButton
+              title="Create Supplier"
+              onClick={() => setModalState(ModalStateEnum.Create)}
+            />
+            <CreateUpdateSupplierModal
+              supplierToUpdate={supplierToUpdate}
+              modalState={modalState}
+              onClose={() => setModalState(ModalStateEnum.Hidden)}
+            />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
           <Box>{renderBody()}</Box>

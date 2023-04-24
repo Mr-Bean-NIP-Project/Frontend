@@ -45,3 +45,8 @@ type Product = {
 type ColumnArgument = {
   [k: string]: any;
 };
+
+export enum ModalStateEnum {
+  Create,
+  Update
+}
