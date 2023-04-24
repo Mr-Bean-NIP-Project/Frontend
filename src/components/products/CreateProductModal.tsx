@@ -1,15 +1,8 @@
-import {
-  Button,
-  Grid,
-  Modal,
-  NumberInput,
-  Select,
-  TextInput,
-} from "@mantine/core";
+import { Grid, Modal, NumberInput, Select, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
-import CreateButtonInModal from "../shared/CreateButtonInModal";
 import LargeCreateButton from "../shared/LargeCreateButton";
+import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 import SelectIngredients from "./SelectIngredients";
 
 const CreateProductModal = () => {
@@ -99,7 +92,7 @@ const CreateProductModal = () => {
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           {createProductFields}
-          <CreateButtonInModal />
+          <SubmitButtonInModal title="Create" />
         </form>
       </Modal>
 

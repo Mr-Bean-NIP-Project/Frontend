@@ -6,6 +6,7 @@ import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
+import { Product } from "@/types/types";
 
 const products: Product[] = [
   {

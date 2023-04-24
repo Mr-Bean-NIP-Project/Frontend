@@ -10,9 +10,10 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
+import { ColumnArgument, Supplier } from "@/types/types";
 import { formatNutriText } from "../../../util";
-import CreateButtonInModal from "../shared/CreateButtonInModal";
 import LargeCreateButton from "../shared/LargeCreateButton";
+import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
 const CreateMaterialModal = () => {
   const [opened, setOpened] = useState(false);
@@ -135,7 +136,7 @@ const CreateMaterialModal = () => {
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           {createMaterialFields}
-          <CreateButtonInModal />
+          <SubmitButtonInModal title="Create" />
         </form>
       </Modal>
 

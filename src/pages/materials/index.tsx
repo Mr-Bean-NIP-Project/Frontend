@@ -6,6 +6,7 @@ import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
+import { Material } from "@/types/types";
 
 export default function Materials() {
   const materials: Material[] = [

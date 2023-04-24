@@ -1,4 +1,4 @@
-type Supplier = {
+export type Supplier = {
   name: string;
 
   // to get from BE
@@ -7,7 +7,7 @@ type Supplier = {
   updated_at?: string;
 };
 
-type Material = {
+export type Material = {
   name: string;
   energy: string;
   protein: string;
@@ -28,7 +28,7 @@ type Material = {
   updated_at?: string;
 };
 
-type Product = {
+export type Product = {
   name: string;
   serving_size: number;
   serving_unit: string;
@@ -42,6 +42,6 @@ type Product = {
   updated_at?: string;
 };
 
-type ColumnArgument = {
+export type ColumnArgument = {
   [k: string]: any;
 };

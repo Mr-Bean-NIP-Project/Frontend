@@ -1,7 +1,10 @@
 import { Button } from "@mantine/core";
 import React from "react";
 
-const CreateButtonInModal = () => {
+interface SubmitButtonInModalProps {
+  title: string;
+}
+const SubmitButtonInModal = ({ title }: SubmitButtonInModalProps) => {
   return (
     <Button
       fullWidth
@@ -10,9 +13,9 @@ const CreateButtonInModal = () => {
       type="submit"
       sx={{ marginTop: 20 }}
     >
-      Create
+      {title}
     </Button>
   );
 };
 
-export default CreateButtonInModal;
+export default SubmitButtonInModal;

@@ -1,9 +1,4 @@
-import {
-  ActionIcon,
-  Button,
-  useMantineColorScheme,
-  useMantineTheme,
-} from "@mantine/core";
+import { ActionIcon, useMantineTheme } from "@mantine/core";
 import { IconNotes } from "@tabler/icons-react";
 import React from "react";
 
