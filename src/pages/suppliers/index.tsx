@@ -64,8 +64,10 @@ export default function Suppliers() {
         await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/supplier/${id}`)
       ).data;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["supplier"] });
+    onSuccess: (data, supplierId) => {
+      queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
+        return old.filter((sup) => sup.id !== supplierId); // removes deleted supplier locally
+      });
       notifications.show({
         title: "Delete Successful",
         color: "green",

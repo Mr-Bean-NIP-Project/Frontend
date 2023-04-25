@@ -65,7 +65,9 @@ const CreateUpdateSupplierModal = ({
       ).data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["supplier"] });
+      queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
+        return [...old, data]; // appends newly created supplier to list
+      });
       notifications.show({
         title: "Create Successful",
         color: "green",
@@ -93,7 +95,13 @@ const CreateUpdateSupplierModal = ({
       ).data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["supplier"] });
+      queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
+        const oldDataIndex = old.findIndex((sup) => sup.id === data.id);
+        if (oldDataIndex === -1) return old;
+
+        old[oldDataIndex] = { ...data }; // replaces old supplier info with newly updated supplier.
+        return old;
+      });
       notifications.show({
         title: "Update Successful",
         color: "green",
