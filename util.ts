@@ -1,3 +1,5 @@
+import { parseISO, format } from 'date-fns'
+
 export function formatText(str: string) {
     let newString = str
         .replace('id', 'ID')
@@ -26,4 +28,10 @@ export function formatNutriText(str: string) {
         newString += " (g)";
     }
     return newString;
+}
+
+export function formatDate(str: string | undefined) {
+    if (!str) return '';
+    const date = parseISO(str);
+    return format(date, 'dd/MM/yy h:mma');
 }

@@ -1,11 +1,14 @@
 import { Group, Table } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { useMemo } from "react";
-import { useQueryClient } from "react-query";
+import {
+  TABLE_ACTIONS_WIDTH,
+  TABLE_DATE_WIDTH,
+  TABLE_ID_WIDTH,
+} from "@/types/constants";
 import { Supplier } from "@/types/types";
+import { formatDate } from "../../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
-
 interface SupplierTableProps {
   suppliers: Supplier[];
   onEdit(supplierToUpdate?: Supplier): void;
@@ -13,15 +16,15 @@ interface SupplierTableProps {
 }
 
 const SupplierTable = ({ suppliers, onEdit, onDelete }: SupplierTableProps) => {
-  const queryClient = useQueryClient();
-
   const rows = useMemo(
     () =>
       suppliers.map((supplier) => (
         <tr key={supplier.id}>
-          <td width="15%">{supplier.id}</td>
+          <td width={TABLE_ID_WIDTH}>{supplier.id}</td>
           <td>{supplier.name}</td>
-          <td width="10%">
+          <td width={TABLE_DATE_WIDTH}>{formatDate(supplier.created_at)}</td>
+          <td width={TABLE_DATE_WIDTH}>{formatDate(supplier.updated_at)}</td>
+          <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
               <EditActionButton onClick={() => onEdit(supplier)} />
               <DeleteActionButton
@@ -48,6 +51,8 @@ const SupplierTable = ({ suppliers, onEdit, onDelete }: SupplierTableProps) => {
         <tr>
           <th>Supplier ID</th>
           <th>Supplier Name</th>
+          <th>Date Created</th>
+          <th>Date Updated</th>
           <th>
             <Group position="right">Actions</Group>
           </th>
