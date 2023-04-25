@@ -4,4 +4,6 @@ export const enum ModalStateEnum {
   Hidden,
 }
 
-export const QUERY_KEY_SUPPLIERS: string[] = ["supplier"];
+export const QUERY_KEYS = {
+  SUPPLIER: ["supplier"],
+};
