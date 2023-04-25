@@ -5,7 +5,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { ModalStateEnum } from "@/types/constants";
+import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
 import { Supplier } from "@/types/types";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
@@ -65,7 +65,7 @@ const CreateUpdateSupplierModal = ({
       ).data;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
+      queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
         return [...old, data]; // appends newly created supplier to list
       });
       notifications.show({
@@ -95,7 +95,7 @@ const CreateUpdateSupplierModal = ({
       ).data;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
+      queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
         const oldDataIndex = old.findIndex((sup) => sup.id === data.id);
         if (oldDataIndex === -1) return old;
 

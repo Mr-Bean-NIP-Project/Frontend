@@ -11,7 +11,7 @@ import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
-import { ModalStateEnum } from "@/types/constants";
+import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
 import { Supplier } from "@/types/types";
 
 export default function Suppliers() {
@@ -22,7 +22,7 @@ export default function Suppliers() {
     isFetching,
     data: suppliers = [],
   } = useQuery({
-    queryKey: ["supplier"],
+    queryKey: QUERY_KEYS.SUPPLIER,
     queryFn: async () =>
       (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/supplier`)).data,
   });
@@ -65,7 +65,7 @@ export default function Suppliers() {
       ).data;
     },
     onSuccess: (data, supplierId) => {
-      queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
+      queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
         return old.filter((sup) => sup.id !== supplierId); // removes deleted supplier locally
       });
       notifications.show({
