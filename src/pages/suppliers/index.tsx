@@ -66,7 +66,7 @@ export default function Suppliers() {
     },
     onSuccess: (data, supplierId) => {
       queryClient.setQueryData<Supplier[]>(["supplier"], (old = []) => {
-        return old.filter(sup => sup.id !== supplierId);
+        return old.filter((sup) => sup.id !== supplierId); // removes deleted supplier locally
       });
       notifications.show({
         title: "Delete Successful",
