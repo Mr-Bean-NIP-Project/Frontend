@@ -1,7 +1,14 @@
 import { Group, Table } from "@mantine/core";
 import { useMemo } from "react";
+import {
+  TABLE_ACTIONS_WIDTH,
+  TABLE_DATE_WIDTH,
+  TABLE_ID_WIDTH,
+} from "@/types/constants";
 import { Product } from "@/types/types";
+import { formatDate } from "../../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
+import EditActionButton from "../shared/EditActionButton";
 
 interface ProductTableProps {
   products: Product[];
@@ -12,15 +19,22 @@ const ProductTable = ({ products }: ProductTableProps) => {
     () =>
       products.map((product) => (
         <tr key={product.id}>
-          <td width="15%">{product.id}</td>
+          <td width={TABLE_ID_WIDTH}>{product.id}</td>
           <td>{product.name}</td>
           <td width="10%">
             <Group position="right">
               {product.serving_size} {product.serving_unit}
             </Group>
           </td>
-          <td width="10%">
+          <td width={TABLE_DATE_WIDTH}>{formatDate(product.created_at)}</td>
+          <td width={TABLE_DATE_WIDTH}>{formatDate(product.updated_at)}</td>
+          <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
+              <EditActionButton
+                onClick={function (): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
               <DeleteActionButton
                 onDelete={function (): void {
                   throw new Error("Function not implemented.");
@@ -50,6 +64,8 @@ const ProductTable = ({ products }: ProductTableProps) => {
           <th>
             <Group position="right">Serving Size</Group>
           </th>
+          <th>Date Created</th>
+          <th>Date Updated</th>
           <th>
             <Group position="right">Actions</Group>
           </th>

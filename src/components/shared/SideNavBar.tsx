@@ -99,7 +99,12 @@ const SideNavBar = () => {
   ));
 
   return (
-    <Navbar height="100vh" width={{ sm: 300 }} p="md" className={classes.nav}>
+    <Navbar
+      height="100vh"
+      width={{ sm: 180, md: 300 }}
+      p="md"
+      className={classes.nav}
+    >
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Text size="lg" weight={600} color={theme.colors.gray[0]}>

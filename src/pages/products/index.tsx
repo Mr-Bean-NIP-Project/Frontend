@@ -16,6 +16,8 @@ const products: Product[] = [
     serving_unit: "g",
     service_per_package: 1,
     sub_product_ids: [],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   {
     id: 76,
@@ -24,6 +26,8 @@ const products: Product[] = [
     serving_unit: "g",
     service_per_package: 1,
     sub_product_ids: [],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
 ];
 

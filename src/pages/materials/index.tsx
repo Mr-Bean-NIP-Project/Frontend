@@ -24,6 +24,8 @@ export default function Materials() {
       dietary_fibre: "0",
       sodium: "0",
       supplier_id: 101,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
     {
       id: 92,
@@ -39,6 +41,8 @@ export default function Materials() {
       dietary_fibre: "0",
       sodium: "0",
       supplier_id: 102,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     },
   ];
 
