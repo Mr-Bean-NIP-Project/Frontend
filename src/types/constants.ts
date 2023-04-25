@@ -3,3 +3,5 @@ export const enum ModalStateEnum {
   Update,
   Hidden,
 }
+
+export const QUERY_KEY_SUPPLIERS: string[] = ["supplier"];
