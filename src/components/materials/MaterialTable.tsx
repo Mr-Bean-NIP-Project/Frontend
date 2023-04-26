@@ -4,6 +4,7 @@ import {
   TABLE_ACTIONS_WIDTH,
   TABLE_DATE_WIDTH,
   TABLE_ID_WIDTH,
+  TABLE_MATERIAL_SUPPLIER_NAME_WIDTH,
 } from "@/types/constants";
 import { Material } from "@/types/types";
 import { formatDate } from "../../../util";
@@ -20,6 +21,7 @@ const MaterialTable = ({ materials }: MaterialTableProps) => {
         <tr key={material.id}>
           <td width={TABLE_ID_WIDTH}>{material.id}</td>
           <td>{material.name}</td>
+          <td width={TABLE_MATERIAL_SUPPLIER_NAME_WIDTH}>{material.supplier.name}</td>
           <td width={TABLE_DATE_WIDTH}>{formatDate(material.created_at)}</td>
           <td width={TABLE_DATE_WIDTH}>{formatDate(material.updated_at)}</td>
           <td width={TABLE_ACTIONS_WIDTH}>
@@ -55,6 +57,7 @@ const MaterialTable = ({ materials }: MaterialTableProps) => {
         <tr>
           <th>Material ID</th>
           <th>Material Name</th>
+          <th>Supplier Name</th>
           <th>Date Created</th>
           <th>Date Updated</th>
           <th>

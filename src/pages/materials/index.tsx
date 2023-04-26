@@ -1,50 +1,17 @@
-import { Box, Container, Group, Text } from "@mantine/core";
+import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
 import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import { Material } from "@/types/types";
+import { useMaterialGet } from "../../hooks/material";
 
 export default function Materials() {
-  const materials: Material[] = [
-    {
-      id: 91,
-      name: "Aiyu Jelly",
-      energy: "0",
-      protein: "0",
-      total_fat: "0",
-      saturated_fat: "0",
-      trans_fat: "0",
-      cholesterol: "0",
-      carbohydrate: "0",
-      sugars: "0",
-      dietary_fibre: "0",
-      sodium: "0",
-      supplier_id: 101,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 92,
-      name: "Water from Swiss Alps",
-      energy: "0",
-      protein: "0",
-      total_fat: "0",
-      saturated_fat: "0",
-      trans_fat: "0",
-      cholesterol: "0",
-      carbohydrate: "0",
-      sugars: "0",
-      dietary_fibre: "0",
-      sodium: "0",
-      supplier_id: 102,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ];
+  const { isLoading, isFetching, data: materials = [] } = useMaterialGet();
+  
+  useEffect(() => setSearchResults(materials), [materials]);
 
   const [searchResults, setSearchResults] = useState(materials);
   const [isSearching, setIsSearching] = useState(false);
@@ -99,6 +66,7 @@ export default function Materials() {
             <CreateMaterialModal />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
+          <LoadingOverlay visible={isLoading || isFetching} overlayBlur={2} />
           <Box>{renderBody()}</Box>
         </Container>
       </main>
