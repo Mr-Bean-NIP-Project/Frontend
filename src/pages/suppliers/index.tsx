@@ -12,6 +12,8 @@ import SupplierTable from "@/components/suppliers/SupplierTable";
 import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
 import { Supplier } from "@/types/types";
 import { useSupplierDelete, useSupplierGet } from "../../hooks/supplier";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();
@@ -52,8 +54,23 @@ export default function Suppliers() {
   const deleteMutation = useSupplierDelete(queryClient);
 
   const handleDelete = useCallback(
-    (id: number) => {
-      deleteMutation.mutate(id);
+    async (id: number) => {
+      try {
+        const data = await deleteMutation.mutateAsync(id);
+        notifications.show({
+          title: "Delete Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `Supplier ${data.name} has been deleted.`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Deleting Supplier",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
     },
     [deleteMutation]
   );

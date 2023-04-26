@@ -59,18 +59,48 @@ const CreateUpdateSupplierModal = ({
 
   const updateMutation = useSupplierUpdate(queryClient);
 
-  function handleSubmit(values: any) {
+  async function handleSubmit(values: any) {
     if (modalState === ModalStateEnum.Create) {
       const newSupplier: Supplier = {
         name: values.name,
       };
-      createMutation.mutate(newSupplier);
+      try {
+        const data = await createMutation.mutateAsync(newSupplier);
+        notifications.show({
+          title: "Create Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `New supplier ${data.name} of id: ${data.id} created!`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Creating Supplier",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
     } else if (modalState === ModalStateEnum.Update) {
       const newSupplier: Supplier = {
         id: supplierToUpdate?.id,
         name: values.name,
       };
-      updateMutation.mutate(newSupplier);
+      try {
+        const data = await updateMutation.mutateAsync(newSupplier);
+        notifications.show({
+          title: "Update Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `Supplier ${data.name} of id: ${data.id} updated!`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Updating Supplier",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
     }
     handleClose();
   }
