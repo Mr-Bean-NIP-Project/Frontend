@@ -7,6 +7,7 @@ export const useMaterialGet = () => {
   return useQuery({
     queryKey: QUERY_KEYS.MATERIAL,
     queryFn: async () =>
-      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/material`)).data as Material[],
+      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/material`))
+        .data as Material[],
   });
 };

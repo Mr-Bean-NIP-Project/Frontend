@@ -1,8 +1,8 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { useState } from "react";
-import { Material } from "@/types/types";
+import { Material, Supplier } from "@/types/types";
 import { formatNutriText } from "../../../util";
-import ViewActionButton from "./ViewActionButton";
+import { ModalStateEnum } from "../../types/constants";
 
 const useStyles = createStyles((theme) => ({
   nutrientTitle: {
@@ -13,23 +13,40 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 interface ViewMaterialDetailModalProps {
-  material: Material;
+  material: Material | undefined;
+  modalState: ModalStateEnum;
+  onClose(): void;
 }
 
 const ViewMaterialDetailModal = ({
   material,
+  modalState,
+  onClose,
 }: ViewMaterialDetailModalProps) => {
   const { classes } = useStyles();
-  const [opened, setOpened] = useState(false);
+  if (!material) return null;
+
+  const viewWhitelist = [
+    "energy",
+    "protein",
+    "total_fat",
+    "saturated_fat",
+    "trans_fat",
+    "cholesterol",
+    "carbohydrate",
+    "sugars",
+    "dietary_fibre",
+    "sodium",
+  ];
 
   const rows = Object.keys(material)
-    .filter((key) => key !== "name" && key !== "id")
+    .filter((key) => viewWhitelist.includes(key))
     .map((key) => (
       <tr key={key}>
         <td width={"40%"}>
           <Text weight={500}>{formatNutriText(key)}</Text>
         </td>
-        <td align="right">{material[key as keyof Material]}</td>
+        <td align="right">{(material as any)[key]}</td>
       </tr>
     ));
 
@@ -51,12 +68,11 @@ const ViewMaterialDetailModal = ({
 
   return (
     <>
-      <ViewActionButton onClick={() => setOpened(true)} />
       <Modal
         size="lg"
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title={`#${material.id}: ${material.name}`}
+        opened={modalState === ModalStateEnum.View}
+        onClose={onClose}
+        title={`#${material?.id}: ${material?.name}`}
       >
         {nutriTable}
       </Modal>

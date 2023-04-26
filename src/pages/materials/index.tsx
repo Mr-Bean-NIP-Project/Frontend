@@ -6,15 +6,28 @@ import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
+import ViewMaterialDetailModal from "../../components/archived/ViewMaterialDetailModal";
 import { useMaterialGet } from "../../hooks/material";
+import { ModalStateEnum } from "../../types/constants";
+import { Material } from "../../types/types";
 
 export default function Materials() {
   const { isLoading, isFetching, data: materials = [] } = useMaterialGet();
-  
+
   useEffect(() => setSearchResults(materials), [materials]);
 
   const [searchResults, setSearchResults] = useState(materials);
   const [isSearching, setIsSearching] = useState(false);
+  const [modalState, setModalState] = useState<ModalStateEnum>(
+    ModalStateEnum.Hidden
+  );
+  const [materialToView, setMaterialToView] = useState<Material | undefined>();
+
+  const handleView = (material?: Material) => {
+    if (!material) return;
+    setModalState(ModalStateEnum.View);
+    setMaterialToView(material);
+  };
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${materials.length} raw material(s)`
@@ -47,7 +60,7 @@ export default function Materials() {
       const subtitle = "Click 'Create Material' to create a new raw material!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
-    return <MaterialTable materials={searchResults} />;
+    return <MaterialTable materials={searchResults} onView={handleView} />;
   }
 
   return (
@@ -64,6 +77,11 @@ export default function Materials() {
               {headerText}
             </Text>
             <CreateMaterialModal />
+            <ViewMaterialDetailModal
+              material={materialToView}
+              modalState={modalState}
+              onClose={() => setModalState(ModalStateEnum.Hidden)}
+            />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
           <LoadingOverlay visible={isLoading || isFetching} overlayBlur={2} />
