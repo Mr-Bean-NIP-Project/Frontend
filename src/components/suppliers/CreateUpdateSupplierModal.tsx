@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
 import { Supplier } from "@/types/types";
-import LargeCreateButton from "../shared/LargeCreateButton";
+import { useSupplierCreate, useSupplierUpdate } from "../../hooks/supplier";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
 interface CreateUpdateSupplierModalProps {
@@ -55,69 +55,9 @@ const CreateUpdateSupplierModal = ({
 
   useEffect(() => prepopulateFormFields(), [supplierToUpdate]);
 
-  const createMutation = useMutation({
-    mutationFn: async (newSupplier: Supplier) => {
-      return (
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/supplier`,
-          newSupplier
-        )
-      ).data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
-        return [...old, data]; // appends newly created supplier to list
-      });
-      notifications.show({
-        title: "Create Successful",
-        color: "green",
-        icon: <IconCheck />,
-        message: `New supplier ${data.name} of id: ${data.id} created!`,
-      });
-    },
-    onError: (error: any) => {
-      notifications.show({
-        title: "Error Creating Supplier",
-        color: "red",
-        icon: <IconX />,
-        message: error.response.data.message,
-      });
-    },
-  });
+  const createMutation = useSupplierCreate(queryClient);
 
-  const updateMutation = useMutation({
-    mutationFn: async (newSupplier: Supplier) => {
-      return (
-        await axios.patch(
-          `${process.env.NEXT_PUBLIC_API_URL}/supplier/${newSupplier.id}`,
-          { name: newSupplier.name }
-        )
-      ).data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
-        const oldDataIndex = old.findIndex((sup) => sup.id === data.id);
-        if (oldDataIndex === -1) return old;
-
-        old[oldDataIndex] = { ...data }; // replaces old supplier info with newly updated supplier.
-        return old;
-      });
-      notifications.show({
-        title: "Update Successful",
-        color: "green",
-        icon: <IconCheck />,
-        message: `Supplier ${data.name} of id: ${data.id} updated!`,
-      });
-    },
-    onError: (error: any) => {
-      notifications.show({
-        title: "Error Updating Supplier",
-        color: "red",
-        icon: <IconX />,
-        message: error.response.data.message,
-      });
-    },
-  });
+  const updateMutation = useSupplierUpdate(queryClient);
 
   function handleSubmit(values: any) {
     if (modalState === ModalStateEnum.Create) {

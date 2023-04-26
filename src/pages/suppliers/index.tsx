@@ -1,10 +1,8 @@
 import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
@@ -13,19 +11,12 @@ import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSuppli
 import SupplierTable from "@/components/suppliers/SupplierTable";
 import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
 import { Supplier } from "@/types/types";
+import { useSupplierDelete, useSupplierGet } from "../../hooks/supplier";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();
 
-  const {
-    isLoading,
-    isFetching,
-    data: suppliers = [],
-  } = useQuery({
-    queryKey: QUERY_KEYS.SUPPLIER,
-    queryFn: async () =>
-      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/supplier`)).data,
-  });
+  const { isLoading, isFetching, data: suppliers = [] } = useSupplierGet();
 
   useEffect(() => setSearchResults(suppliers), [suppliers]);
 
@@ -58,24 +49,7 @@ export default function Suppliers() {
     setSearchResults(results);
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      return (
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/supplier/${id}`)
-      ).data;
-    },
-    onSuccess: (data, supplierId) => {
-      queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
-        return old.filter((sup) => sup.id !== supplierId); // removes deleted supplier locally
-      });
-      notifications.show({
-        title: "Delete Successful",
-        color: "green",
-        icon: <IconCheck />,
-        message: `Supplier ${data.name} has been deleted.`,
-      });
-    },
-  });
+  const deleteMutation = useSupplierDelete(queryClient);
 
   const handleDelete = useCallback(
     (id: number) => {
