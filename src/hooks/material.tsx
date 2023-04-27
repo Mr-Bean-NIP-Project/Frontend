@@ -44,3 +44,27 @@ export const useMaterialCreate = (queryClient: QueryClient) => {
     },
   });
 };
+
+export const useMaterialUpdate = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const payloadWithoutId = Object.fromEntries(
+        Object.entries(payload).filter(([key]) => !["id"].includes(key))
+      );
+      return (
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL}/material/${payload.id}`,
+          payloadWithoutId
+        )
+      ).data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData<Material[]>(QUERY_KEYS.MATERIAL, (old = []) => {
+        const oldDataIndex = old.findIndex((mat) => mat.id === data.id);
+        if (oldDataIndex === -1) return old;
+        old[oldDataIndex] = { ...data }; // replaces old material info with newly updated material
+        return old;
+      });
+    },
+  });
+};
