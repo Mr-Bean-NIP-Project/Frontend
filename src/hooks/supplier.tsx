@@ -1,5 +1,3 @@
-import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { QueryClient, useMutation, useQuery } from "react-query";
 import { QUERY_KEYS } from "../types/constants";
@@ -24,12 +22,6 @@ export const useSupplierDelete = (queryClient: QueryClient) => {
       queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
         return old.filter((sup) => sup.id !== supplierId); // removes deleted supplier locally
       });
-      notifications.show({
-        title: "Delete Successful",
-        color: "green",
-        icon: <IconCheck />,
-        message: `Supplier ${data.name} has been deleted.`,
-      });
     },
   });
 };
@@ -47,20 +39,6 @@ export const useSupplierCreate = (queryClient: QueryClient) => {
     onSuccess: (data) => {
       queryClient.setQueryData<Supplier[]>(QUERY_KEYS.SUPPLIER, (old = []) => {
         return [...old, data]; // appends newly created supplier to list
-      });
-      notifications.show({
-        title: "Create Successful",
-        color: "green",
-        icon: <IconCheck />,
-        message: `New supplier ${data.name} of id: ${data.id} created!`,
-      });
-    },
-    onError: (error: any) => {
-      notifications.show({
-        title: "Error Creating Supplier",
-        color: "red",
-        icon: <IconX />,
-        message: error.response.data.message,
       });
     },
   });
@@ -83,20 +61,6 @@ export const useSupplierUpdate = (queryClient: QueryClient) => {
 
         old[oldDataIndex] = { ...data }; // replaces old supplier info with newly updated supplier.
         return old;
-      });
-      notifications.show({
-        title: "Update Successful",
-        color: "green",
-        icon: <IconCheck />,
-        message: `Supplier ${data.name} of id: ${data.id} updated!`,
-      });
-    },
-    onError: (error: any) => {
-      notifications.show({
-        title: "Error Updating Supplier",
-        color: "red",
-        icon: <IconX />,
-        message: error.response.data.message,
       });
     },
   });

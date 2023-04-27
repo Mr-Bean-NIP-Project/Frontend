@@ -6,7 +6,7 @@ import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import ViewMaterialDetailModal from "../../components/archived/ViewMaterialDetailModal";
+import ViewMaterialDetailModal from "../../components/materials/ViewMaterialDetailModal";
 import { useMaterialGet } from "../../hooks/material";
 import { ModalStateEnum } from "../../types/constants";
 import { Material } from "../../types/types";

@@ -1,15 +1,16 @@
 import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
-import axios from "axios";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
-import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
+import { ModalStateEnum } from "@/types/constants";
 import { Supplier } from "@/types/types";
 import { useSupplierDelete, useSupplierGet } from "../../hooks/supplier";
 
@@ -52,8 +53,23 @@ export default function Suppliers() {
   const deleteMutation = useSupplierDelete(queryClient);
 
   const handleDelete = useCallback(
-    (id: number) => {
-      deleteMutation.mutate(id);
+    async (id: number) => {
+      try {
+        const data = await deleteMutation.mutateAsync(id);
+        notifications.show({
+          title: "Delete Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `Supplier ${data.name} has been deleted.`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Deleting Supplier",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
     },
     [deleteMutation]
   );
