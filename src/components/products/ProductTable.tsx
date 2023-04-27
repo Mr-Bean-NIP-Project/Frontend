@@ -6,7 +6,7 @@ import {
   TABLE_ID_WIDTH,
 } from "@/types/constants";
 import { Product } from "@/types/types";
-import { formatDate } from "../../../util";
+import { formatDate } from "../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
 

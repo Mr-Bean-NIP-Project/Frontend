@@ -1,6 +1,6 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { Material } from "@/types/types";
-import { NUTRITION, formatNutriText, formatNutriValue } from "../../../util";
+import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
 import { ModalStateEnum } from "../../types/constants";
 
 const useStyles = createStyles((theme) => ({

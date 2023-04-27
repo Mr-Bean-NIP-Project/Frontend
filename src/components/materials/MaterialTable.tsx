@@ -7,7 +7,7 @@ import {
   TABLE_MATERIAL_SUPPLIER_NAME_WIDTH,
 } from "@/types/constants";
 import { Material } from "@/types/types";
-import { formatDate } from "../../../util";
+import { formatDate } from "../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
 import ViewActionButton from "../shared/ViewActionButton";

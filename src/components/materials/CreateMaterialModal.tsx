@@ -22,7 +22,7 @@ import {
   NUTRITION_DP,
   divideNutriValue,
   formatNutriText,
-} from "../../../util";
+} from "../../util";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
