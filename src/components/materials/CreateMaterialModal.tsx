@@ -11,35 +11,18 @@ import {
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
 import { ColumnArgument, Supplier } from "@/types/types";
-import { formatNutriText } from "../../../util";
+import { NUTRITION, NUTRITION_DP, formatNutriText } from "../../../util";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
+import { useSupplierGet } from "@/hooks/supplier";
 
 const CreateMaterialModal = () => {
   const [opened, setOpened] = useState(false);
 
-  const suppliers: Supplier[] = [
-    { id: 1, name: "Supplier ABC" },
-    { id: 2, name: "Supplier XYZ" },
-  ];
-
-  const nutri: string[] = [
-    "energy",
-    "protein",
-    "total_fat",
-    "saturated_fat",
-    "trans_fat",
-    "cholesterol",
-    "carbohydrate",
-    "sugars",
-    "dietary_fibre",
-    "sodium",
-  ];
-
-  const wholeNumNutrients = ["energy", "sodium", "cholesterol"];
+  const { data: suppliers = [] } = useSupplierGet();
 
   const nutriValues: ColumnArgument = {};
-  nutri.forEach((val) => (nutriValues[val] = 0));
+  Object.values(NUTRITION).forEach((val) => (nutriValues[val] = 0));
 
   const form = useForm({
     initialValues: {
@@ -60,7 +43,7 @@ const CreateMaterialModal = () => {
   }
 
   const nutritionalFields: JSX.Element[] = [];
-  nutri.forEach((nutrient) => {
+  Object.values(NUTRITION).forEach((nutrient) => {
     const nutriText = formatNutriText(nutrient);
     nutritionalFields.push(
       <tr key={nutrient}>
@@ -68,7 +51,7 @@ const CreateMaterialModal = () => {
         <td>
           <Group position="right">
             <NumberInput
-              precision={wholeNumNutrients.includes(nutrient) ? 0 : 1}
+              precision={NUTRITION_DP[nutrient]}
               key={nutrient}
               placeholder={nutriText}
               size="sm"
