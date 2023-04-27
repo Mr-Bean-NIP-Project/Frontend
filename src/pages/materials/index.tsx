@@ -1,6 +1,9 @@
 import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
 import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
@@ -8,11 +11,12 @@ import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import ViewMaterialDetailModal from "../../components/materials/ViewMaterialDetailModal";
-import { useMaterialGet } from "../../hooks/material";
+import { useMaterialDelete, useMaterialGet } from "../../hooks/material";
 import { ModalStateEnum } from "../../types/constants";
 import { Material } from "../../types/types";
 
 export default function Materials() {
+  const queryClient = useQueryClient();
   const { isLoading, isFetching, data: materials = [] } = useMaterialGet();
 
   const [searchResults, setSearchResults] = useState(materials);
@@ -56,6 +60,29 @@ export default function Materials() {
     setModalState(ModalStateEnum.Hidden);
   }
 
+  const deleteMutation = useMaterialDelete(queryClient);
+  const handleDelete = useCallback(
+    async (id: number) => {
+      try {
+        const data = await deleteMutation.mutateAsync(id);
+        notifications.show({
+          title: "Delete Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `Material ${data.name} has been deleted.`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Deleting Material",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
+    },
+    [deleteMutation]
+  );
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -65,7 +92,13 @@ export default function Materials() {
       const subtitle = "Click 'Create Material' to create a new raw material!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
-    return <MaterialTable materials={searchResults} onView={handleView} />;
+    return (
+      <MaterialTable
+        materials={searchResults}
+        onView={handleView}
+        onDelete={handleDelete}
+      />
+    );
   }
 
   return (

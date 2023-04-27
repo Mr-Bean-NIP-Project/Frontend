@@ -14,9 +14,10 @@ import ViewActionButton from "../shared/ViewActionButton";
 interface MaterialTableProps {
   materials: Material[];
   onView(material: Material): void;
+  onDelete(id?: number): void;
 }
 
-const MaterialTable = ({ materials, onView }: MaterialTableProps) => {
+const MaterialTable = ({ materials, onView, onDelete }: MaterialTableProps) => {
   const rows = useMemo(
     () =>
       materials.map((material) => (
@@ -37,16 +38,14 @@ const MaterialTable = ({ materials, onView }: MaterialTableProps) => {
                 }}
               />
               <DeleteActionButton
-                onDelete={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-                itemName={""}
+                itemName={material.name}
+                onDelete={() => onDelete(material.id)}
               />
             </Group>
           </td>
         </tr>
       )),
-    [materials]
+    [materials, onDelete]
   );
 
   return (
