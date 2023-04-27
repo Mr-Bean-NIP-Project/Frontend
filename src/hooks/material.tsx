@@ -12,6 +12,21 @@ export const useMaterialGet = () => {
   });
 };
 
+export const useMaterialDelete = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: async (id: number) => {
+      return (
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/material/${id}`)
+      ).data as Material;
+    },
+    onSuccess: (data, materialId) => {
+      queryClient.setQueryData<Material[]>(QUERY_KEYS.MATERIAL, (old = []) => {
+        return old.filter((mat) => mat.id !== materialId); // removes deleted material locally
+      });
+    },
+  });
+};
+
 export const useMaterialCreate = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: async (newMaterial: Material) => {
