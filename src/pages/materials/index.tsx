@@ -4,7 +4,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
-import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
+import CreateUpdateMaterialModal from "@/components/materials/CreateUpdateMaterialModal";
 import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
@@ -24,14 +24,14 @@ export default function Materials() {
   const [modalState, setModalState] = useState<ModalStateEnum>(
     ModalStateEnum.Hidden
   );
-  const [materialToView, setMaterialToView] = useState<Material | undefined>();
+  const [materialTarget, setMaterialTarget] = useState<Material | undefined>();
 
   useEffect(() => setSearchResults(materials), [materials]);
 
-  const handleView = (material?: Material) => {
+  const handleView = (material: Material) => {
     if (!material) return;
     setModalState(ModalStateEnum.View);
-    setMaterialToView(material);
+    setMaterialTarget(material);
   };
 
   const headerText: string = isSearching
@@ -58,6 +58,7 @@ export default function Materials() {
 
   function handleClose() {
     setModalState(ModalStateEnum.Hidden);
+    setMaterialTarget(undefined);
   }
 
   const deleteMutation = useMaterialDelete(queryClient);
@@ -83,6 +84,12 @@ export default function Materials() {
     [deleteMutation]
   );
 
+  function handleEdit(material: Material) {
+    if (!material) return;
+    setModalState(ModalStateEnum.Update);
+    setMaterialTarget(material);
+  }
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -97,6 +104,7 @@ export default function Materials() {
         materials={searchResults}
         onView={handleView}
         onDelete={handleDelete}
+        onEdit={handleEdit}
       />
     );
   }
@@ -118,12 +126,13 @@ export default function Materials() {
               title="Create Material"
               onClick={() => setModalState(ModalStateEnum.Create)}
             />
-            <CreateMaterialModal
+            <CreateUpdateMaterialModal
+              materialToUpdate={materialTarget}
               modalState={modalState}
               onClose={handleClose}
             />
             <ViewMaterialDetailModal
-              material={materialToView}
+              material={materialTarget}
               modalState={modalState}
               onClose={handleClose}
             />

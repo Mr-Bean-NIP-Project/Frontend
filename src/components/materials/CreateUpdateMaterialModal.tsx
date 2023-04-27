@@ -11,33 +11,42 @@ import {
 import { TransformedValues, isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQueryClient } from "react-query";
-import { useMaterialCreate } from "@/hooks/material";
+import { useMaterialCreate, useMaterialUpdate } from "@/hooks/material";
 import { useSupplierGet } from "@/hooks/supplier";
 import { ModalStateEnum } from "@/types/constants";
-import { ColumnArgument, Material } from "@/types/types";
+import { Material } from "@/types/types";
 import {
   NUTRITION,
   NUTRITION_DP,
   divideNutriValue,
   formatNutriText,
+  formatNutriValue,
 } from "../../util";
-import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
-interface CreateMaterialModalProps {
+interface CreateUpdateMaterialModalProps {
+  materialToUpdate?: Material;
   modalState: ModalStateEnum;
   onClose(): void;
 }
 
-const CreateMaterialModal = ({
+const CreateUpdateMaterialModal = ({
+  materialToUpdate,
   modalState,
   onClose,
-}: CreateMaterialModalProps) => {
+}: CreateUpdateMaterialModalProps) => {
   const queryClient = useQueryClient();
-
   const { data: suppliers = [] } = useSupplierGet();
+
+  const modalTitle =
+    modalState === ModalStateEnum.Create
+      ? "Create Material"
+      : "Update Material";
+
+  const submitButtonTitle =
+    modalState === ModalStateEnum.Create ? "Create" : "Save";
 
   const form = useForm({
     initialValues: {
@@ -85,7 +94,28 @@ const CreateMaterialModal = ({
     },
   });
 
+  type FormValues = typeof form.values;
+
+  const prepopulateFormFields = () => {
+    if (materialToUpdate) {
+      form.setFieldValue("name", materialToUpdate.name ?? "");
+      form.setFieldValue(
+        "supplier_id",
+        materialToUpdate.supplier?.id?.toString() ?? ""
+      );
+      Object.values(NUTRITION).forEach((val) =>
+        form.setFieldValue(
+          val,
+          Number(formatNutriValue(val, materialToUpdate[val]))
+        )
+      );
+    }
+  };
+
+  useEffect(() => prepopulateFormFields(), [materialToUpdate]);
+
   const createMutation = useMaterialCreate(queryClient);
+  const updateMutation = useMaterialUpdate(queryClient);
 
   function handleClose() {
     onClose();
@@ -108,6 +138,37 @@ const CreateMaterialModal = ({
       } catch (error: any) {
         notifications.show({
           title: "Error Creating Material",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
+    } else if (modalState === ModalStateEnum.Update && materialToUpdate) {
+      const valuesToUpdate: any = {};
+      Object.keys(form.values).forEach((key) => {
+        if (
+          values[key as keyof FormValues] !==
+          materialToUpdate[key as keyof Material]
+        ) {
+          valuesToUpdate[key] = values[key as keyof FormValues];
+        }
+      });
+      const payload = {
+        id: materialToUpdate?.id,
+        ...valuesToUpdate,
+      };
+
+      try {
+        const data = await updateMutation.mutateAsync(payload);
+        notifications.show({
+          title: "Update Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `Material ${data.name} of id: ${data.id} updated!`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Updating Material",
           color: "red",
           icon: <IconX />,
           message: error.response.data.message,
@@ -151,7 +212,7 @@ const CreateMaterialModal = ({
     });
   }
 
-  const createMaterialFields = (
+  const materialFields = (
     <>
       <Grid gutter="md">
         <Grid.Col span={12}>
@@ -201,15 +262,15 @@ const CreateMaterialModal = ({
         closeOnClickOutside={false}
         closeOnEscape={false}
         onClose={handleClose}
-        title="Create Material"
+        title={modalTitle}
       >
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-          {createMaterialFields}
-          <SubmitButtonInModal title="Create" />
+          {materialFields}
+          <SubmitButtonInModal title={submitButtonTitle} />
         </form>
       </Modal>
     </>
   );
 };
 
-export default CreateMaterialModal;
+export default CreateUpdateMaterialModal;

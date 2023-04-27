@@ -15,9 +15,15 @@ interface MaterialTableProps {
   materials: Material[];
   onView(material: Material): void;
   onDelete(id?: number): void;
+  onEdit(material: Material): void;
 }
 
-const MaterialTable = ({ materials, onView, onDelete }: MaterialTableProps) => {
+const MaterialTable = ({
+  materials,
+  onView,
+  onDelete,
+  onEdit,
+}: MaterialTableProps) => {
   const rows = useMemo(
     () =>
       materials.map((material) => (
@@ -32,11 +38,7 @@ const MaterialTable = ({ materials, onView, onDelete }: MaterialTableProps) => {
           <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
               <ViewActionButton onClick={() => onView(material)} />
-              <EditActionButton
-                onClick={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
+              <EditActionButton onClick={() => onEdit(material)} />
               <DeleteActionButton
                 itemName={material.name}
                 onDelete={() => onDelete(material.id)}

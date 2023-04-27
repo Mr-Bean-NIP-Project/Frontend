@@ -23,7 +23,9 @@ export default function Suppliers() {
   const [modalState, setModalState] = useState<ModalStateEnum>(
     ModalStateEnum.Hidden
   );
-  const [supplierToUpdate, setSupplierToUpdate] = useState<Supplier>();
+  const [supplierToUpdate, setSupplierToUpdate] = useState<
+    Supplier | undefined
+  >();
 
   useEffect(() => setSearchResults(suppliers), [suppliers]);
 
@@ -73,6 +75,11 @@ export default function Suppliers() {
     [deleteMutation]
   );
 
+  function handleClose() {
+    setModalState(ModalStateEnum.Hidden);
+    setSupplierToUpdate(undefined);
+  }
+
   function handleEdit(supplier: Supplier) {
     if (!supplier) return;
     setModalState(ModalStateEnum.Update);
@@ -117,7 +124,7 @@ export default function Suppliers() {
             <CreateUpdateSupplierModal
               supplierToUpdate={supplierToUpdate}
               modalState={modalState}
-              onClose={() => setModalState(ModalStateEnum.Hidden)}
+              onClose={handleClose}
             />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
