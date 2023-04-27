@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import CreateMaterialModal from "@/components/materials/CreateMaterialModal";
 import MaterialTable from "@/components/materials/MaterialTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
+import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import ViewMaterialDetailModal from "../../components/materials/ViewMaterialDetailModal";
@@ -14,14 +15,14 @@ import { Material } from "../../types/types";
 export default function Materials() {
   const { isLoading, isFetching, data: materials = [] } = useMaterialGet();
 
-  useEffect(() => setSearchResults(materials), [materials]);
-
   const [searchResults, setSearchResults] = useState(materials);
   const [isSearching, setIsSearching] = useState(false);
   const [modalState, setModalState] = useState<ModalStateEnum>(
     ModalStateEnum.Hidden
   );
   const [materialToView, setMaterialToView] = useState<Material | undefined>();
+
+  useEffect(() => setSearchResults(materials), [materials]);
 
   const handleView = (material?: Material) => {
     if (!material) return;
@@ -51,6 +52,10 @@ export default function Materials() {
     setSearchResults(results);
   };
 
+  function handleClose() {
+    setModalState(ModalStateEnum.Hidden);
+  }
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -76,11 +81,18 @@ export default function Materials() {
             <Text size="2rem" weight={600}>
               {headerText}
             </Text>
-            <CreateMaterialModal />
+            <LargeCreateButton
+              title="Create Material"
+              onClick={() => setModalState(ModalStateEnum.Create)}
+            />
+            <CreateMaterialModal
+              modalState={modalState}
+              onClose={handleClose}
+            />
             <ViewMaterialDetailModal
               material={materialToView}
               modalState={modalState}
-              onClose={() => setModalState(ModalStateEnum.Hidden)}
+              onClose={handleClose}
             />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />

@@ -24,7 +24,7 @@ const MaterialTable = ({ materials, onView }: MaterialTableProps) => {
           <td width={TABLE_ID_WIDTH}>{material.id}</td>
           <td>{material.name}</td>
           <td width={TABLE_MATERIAL_SUPPLIER_NAME_WIDTH}>
-            {material.supplier.name}
+            {material.supplier?.name}
           </td>
           <td width={TABLE_DATE_WIDTH}>{formatDate(material.created_at)}</td>
           <td width={TABLE_DATE_WIDTH}>{formatDate(material.updated_at)}</td>
