@@ -1,8 +1,8 @@
 export const enum ModalStateEnum {
-  Create,
-  Update,
-  Hidden,
-  View,
+  Create = "create",
+  Update = "update",
+  Hidden = "hidden",
+  View = "view",
 }
 
 export const QUERY_KEYS = {

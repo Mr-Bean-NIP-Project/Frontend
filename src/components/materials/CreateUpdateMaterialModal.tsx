@@ -97,7 +97,7 @@ const CreateUpdateMaterialModal = ({
   type FormValues = typeof form.values;
 
   const prepopulateFormFields = () => {
-    if (materialToUpdate) {
+    if (materialToUpdate && modalState === ModalStateEnum.Update) {
       form.setFieldValue("name", materialToUpdate.name ?? "");
       form.setFieldValue(
         "supplier_id",
@@ -112,7 +112,7 @@ const CreateUpdateMaterialModal = ({
     }
   };
 
-  useEffect(() => prepopulateFormFields(), [materialToUpdate]);
+  useEffect(() => prepopulateFormFields(), [materialToUpdate, modalState]);
 
   const createMutation = useMaterialCreate(queryClient);
   const updateMutation = useMaterialUpdate(queryClient);

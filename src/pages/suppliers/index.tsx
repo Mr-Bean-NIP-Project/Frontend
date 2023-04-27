@@ -80,7 +80,7 @@ export default function Suppliers() {
     setSupplierToUpdate(undefined);
   }
 
-  function handleEdit(supplier: Supplier) {
+  function handleClickEdit(supplier: Supplier) {
     if (!supplier) return;
     setModalState(ModalStateEnum.Update);
     setSupplierToUpdate(supplier);
@@ -103,7 +103,7 @@ export default function Suppliers() {
     return (
       <SupplierTable
         suppliers={searchResults}
-        onEdit={handleEdit}
+        onEdit={handleClickEdit}
         onDelete={handleDelete}
       />
     );
