@@ -1,6 +1,5 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
-import { useState } from "react";
-import { Material, Supplier } from "@/types/types";
+import { Material } from "@/types/types";
 import { NUTRITION, formatNutriText, formatNutriValue } from "../../../util";
 import { ModalStateEnum } from "../../types/constants";
 
@@ -26,21 +25,8 @@ const ViewMaterialDetailModal = ({
   const { classes } = useStyles();
   if (!material) return null;
 
-  const viewWhitelist = [
-    "energy",
-    "protein",
-    "total_fat",
-    "saturated_fat",
-    "trans_fat",
-    "cholesterol",
-    "carbohydrate",
-    "sugars",
-    "dietary_fibre",
-    "sodium",
-  ];
-
   const rows = Object.keys(material)
-    .filter((key) => viewWhitelist.includes(key))
+    .filter((key) => Object.values(NUTRITION).includes(key as NUTRITION))
     .map((key) => (
       <tr key={key}>
         <td width={"40%"}>
@@ -74,8 +60,11 @@ const ViewMaterialDetailModal = ({
         size="lg"
         opened={modalState === ModalStateEnum.View}
         onClose={onClose}
-        title={`#${material.id}: ${material.name} (per 100g/ml)`}
+        title={`#${material.id}: ${material.name}`}
       >
+        <Text weight={600} style={{ marginBottom: 10 }}>
+          Nutrition Information per 100 (g or ml)
+        </Text>
         {nutriTable}
       </Modal>
     </>
