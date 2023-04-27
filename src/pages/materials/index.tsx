@@ -91,6 +91,10 @@ export default function Materials() {
   }
 
   function renderBody() {
+    if (isLoading || isFetching) {
+      return null;
+    }
+
     if (searchResults.length === 0) {
       if (isSearching) {
         return <NoSearchResultsMessage />;
@@ -99,6 +103,7 @@ export default function Materials() {
       const subtitle = "Click 'Create Material' to create a new raw material!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
+
     return (
       <MaterialTable
         materials={searchResults}
@@ -117,7 +122,7 @@ export default function Materials() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <Container fluid>
+        <Container fluid pos="relative">
           <Group position="apart">
             <Text size="2rem" weight={600}>
               {headerText}
@@ -138,8 +143,10 @@ export default function Materials() {
             />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
-          <LoadingOverlay visible={isLoading || isFetching} overlayBlur={2} />
-          <Box>{renderBody()}</Box>
+          <Box style={{ position: "relative", minHeight: "70vh" }}>
+            <LoadingOverlay visible={isLoading || isFetching} overlayBlur={2} />
+            {renderBody()}
+          </Box>
         </Container>
       </main>
     </>
