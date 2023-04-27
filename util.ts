@@ -86,6 +86,6 @@ export function formatNutriValue(
   nutriKey: NUTRITION,
   nutriVal: BigSource
 ): string {
-  const numDp = NUTRITION_DP[nutriKey as any] as any;
+  const numDp = NUTRITION_DP[nutriKey];
   return Big(nutriVal).times(100).toFixed(numDp);
 }
