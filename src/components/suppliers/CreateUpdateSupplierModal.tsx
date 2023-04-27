@@ -2,10 +2,9 @@ import { Modal, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import { ModalStateEnum, QUERY_KEYS } from "@/types/constants";
+import { useEffect } from "react";
+import { useQueryClient } from "react-query";
+import { ModalStateEnum } from "@/types/constants";
 import { Supplier } from "@/types/types";
 import { useSupplierCreate, useSupplierUpdate } from "../../hooks/supplier";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
@@ -42,7 +41,7 @@ const CreateUpdateSupplierModal = ({
   });
 
   const prepopulateFormFields = () => {
-    if (supplierToUpdate) {
+    if (supplierToUpdate && modalState === ModalStateEnum.Update) {
       form.setFieldValue("name", supplierToUpdate.name ?? "");
     }
   };
@@ -52,10 +51,9 @@ const CreateUpdateSupplierModal = ({
     form.reset();
   }
 
-  useEffect(() => prepopulateFormFields(), [supplierToUpdate]);
+  useEffect(() => prepopulateFormFields(), [supplierToUpdate, modalState]);
 
   const createMutation = useSupplierCreate(queryClient);
-
   const updateMutation = useSupplierUpdate(queryClient);
 
   async function handleSubmit(values: any) {
@@ -108,10 +106,13 @@ const CreateUpdateSupplierModal = ({
     <>
       <Modal
         size="lg"
-        opened={modalState !== ModalStateEnum.Hidden}
+        opened={
+          modalState === ModalStateEnum.Create ||
+          modalState === ModalStateEnum.Update
+        }
         closeOnClickOutside={false}
         closeOnEscape={false}
-        onClose={() => onClose()}
+        onClose={handleClose}
         title={modalTitle}
       >
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>

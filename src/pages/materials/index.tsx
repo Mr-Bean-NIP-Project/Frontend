@@ -84,7 +84,7 @@ export default function Materials() {
     [deleteMutation]
   );
 
-  function handleEdit(material: Material) {
+  function handleClickEdit(material: Material) {
     if (!material) return;
     setModalState(ModalStateEnum.Update);
     setMaterialTarget(material);
@@ -109,7 +109,7 @@ export default function Materials() {
         materials={searchResults}
         onView={handleView}
         onDelete={handleDelete}
-        onEdit={handleEdit}
+        onEdit={handleClickEdit}
       />
     );
   }

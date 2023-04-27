@@ -2,6 +2,7 @@ import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { Material } from "@/types/types";
 import { ModalStateEnum } from "../../types/constants";
 import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
+import { useEffect } from "react";
 
 const useStyles = createStyles((theme) => ({
   nutrientTitle: {
@@ -59,7 +60,7 @@ const ViewMaterialDetailModal = ({
       <Modal
         size="lg"
         opened={modalState === ModalStateEnum.View}
-        onClose={onClose}
+        onClose={() => onClose()}
         title={`#${material.id}: ${material.name}`}
       >
         <Text weight={600} style={{ marginBottom: 10 }}>
