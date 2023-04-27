@@ -86,10 +86,6 @@ export function formatNutriValue(
   nutriKey: NUTRITION,
   nutriVal: BigSource
 ): string {
-  if (!NUTRITION_FIELDS.includes(nutriKey)) {
-    console.error(`Nutrition key: ${nutriKey} not recognized!`);
-    return nutriVal.toString();
-  }
   const numDp = NUTRITION_DP[nutriKey as any] as any;
   return Big(nutriVal).times(100).toFixed(numDp);
 }
