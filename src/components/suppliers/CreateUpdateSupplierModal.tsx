@@ -42,7 +42,6 @@ const CreateUpdateSupplierModal = ({
   });
 
   const prepopulateFormFields = () => {
-    console.log(supplierToUpdate);
     if (supplierToUpdate) {
       form.setFieldValue("name", supplierToUpdate.name ?? "");
     }
