@@ -7,7 +7,8 @@ export const useSupplierGet = () => {
   return useQuery({
     queryKey: QUERY_KEYS.SUPPLIER,
     queryFn: async () =>
-      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/supplier`)).data as Supplier[],
+      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/supplier`))
+        .data as Supplier[],
   });
 };
 

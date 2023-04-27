@@ -16,10 +16,7 @@ import { useSupplierDelete, useSupplierGet } from "../../hooks/supplier";
 
 export default function Suppliers() {
   const queryClient = useQueryClient();
-
   const { isLoading, isFetching, data: suppliers = [] } = useSupplierGet();
-
-  useEffect(() => setSearchResults(suppliers), [suppliers]);
 
   const [searchResults, setSearchResults] = useState(suppliers);
   const [isSearching, setIsSearching] = useState(false);
@@ -27,6 +24,8 @@ export default function Suppliers() {
     ModalStateEnum.Hidden
   );
   const [supplierToUpdate, setSupplierToUpdate] = useState<Supplier>();
+
+  useEffect(() => setSearchResults(suppliers), [suppliers]);
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${suppliers.length} supplier(s)`

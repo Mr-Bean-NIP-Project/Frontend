@@ -20,12 +20,14 @@ export type Material = {
   dietary_fibre: string;
   sodium: string;
 
-  supplier: Supplier;
-
   // to get from BE
+  supplier?: Supplier;
   id?: number;
   created_at?: string;
   updated_at?: string;
+
+  // for create
+  supplier_id?: number;
 };
 
 export type Product = {

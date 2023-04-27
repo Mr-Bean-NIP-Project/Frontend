@@ -88,3 +88,12 @@ export function formatNutriValue(
   const numDp = NUTRITION_DP[nutriKey];
   return Big(nutriVal).times(100).toFixed(numDp);
 }
+
+export function divideNutriValue(
+  nutriKey: NUTRITION,
+  nutriVal: BigSource
+): string {
+  const numDp = NUTRITION_DP[nutriKey];
+  return Big(nutriVal).div(100).toString();
+}
+
