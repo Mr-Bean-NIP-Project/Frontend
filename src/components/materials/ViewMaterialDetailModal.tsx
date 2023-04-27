@@ -1,7 +1,7 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { useState } from "react";
 import { Material, Supplier } from "@/types/types";
-import { formatNutriText } from "../../../util";
+import { NUTRITION, formatNutriText, formatNutriValue } from "../../../util";
 import { ModalStateEnum } from "../../types/constants";
 
 const useStyles = createStyles((theme) => ({
@@ -46,7 +46,9 @@ const ViewMaterialDetailModal = ({
         <td width={"40%"}>
           <Text weight={500}>{formatNutriText(key)}</Text>
         </td>
-        <td align="right">{(material as any)[key]}</td>
+        <td align="right">
+          {formatNutriValue(key as NUTRITION, (material as any)[key])}
+        </td>
       </tr>
     ));
 
@@ -72,7 +74,7 @@ const ViewMaterialDetailModal = ({
         size="lg"
         opened={modalState === ModalStateEnum.View}
         onClose={onClose}
-        title={`#${material?.id}: ${material?.name}`}
+        title={`#${material.id}: ${material.name} (per 100g/ml)`}
       >
         {nutriTable}
       </Modal>
