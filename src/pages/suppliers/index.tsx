@@ -87,6 +87,10 @@ export default function Suppliers() {
   }
 
   function renderBody() {
+    if (isLoading || isFetching) {
+      return null;
+    }
+
     if (searchResults.length === 0) {
       if (isSearching) {
         return <NoSearchResultsMessage />;
@@ -95,6 +99,7 @@ export default function Suppliers() {
       const subtitle = "Click 'Create Supplier' to create a new supplier!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
+
     return (
       <SupplierTable
         suppliers={searchResults}
