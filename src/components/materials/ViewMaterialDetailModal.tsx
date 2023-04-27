@@ -46,7 +46,9 @@ const ViewMaterialDetailModal = ({
         <td width={"40%"}>
           <Text weight={500}>{formatNutriText(key)}</Text>
         </td>
-        <td align="right">{formatNutriValue(key as NUTRITION, (material as any)[key])}</td>
+        <td align="right">
+          {formatNutriValue(key as NUTRITION, (material as any)[key])}
+        </td>
       </tr>
     ));
 
