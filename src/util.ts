@@ -1,5 +1,5 @@
-import { parseISO, format } from "date-fns";
 import Big, { BigSource } from "big.js";
+import { parseISO, format } from "date-fns";
 
 export enum SERVING_UNIT {
   G = "g",
@@ -96,4 +96,3 @@ export function divideNutriValue(
   const numDp = NUTRITION_DP[nutriKey];
   return Big(nutriVal).div(100).toString();
 }
-
