@@ -1,6 +1,7 @@
 import { Modal, Table, Text, createStyles } from "@mantine/core";
 import { ModalStateEnum } from "../../types/constants";
 import { Product } from "../../types/types";
+import DimmedMessage from "../shared/DimmedMessage";
 
 const useStyles = createStyles((theme) => ({
   subProductTitle: {
@@ -55,7 +56,17 @@ export const ViewProductDetailModal = ({
           <col className={classes.subProductTitle} />
           <col />
         </colgroup>
-        <tbody>{subProductRows}</tbody>
+        <tbody>
+          <tr>
+            <td>
+              <Text weight={500}>Name</Text>
+            </td>
+            <td align="right">
+              <Text weight={500}>Quantity</Text>
+            </td>
+          </tr>
+          {subProductRows}
+        </tbody>
       </Table>
     </>
   );
@@ -84,10 +95,23 @@ export const ViewProductDetailModal = ({
           <col className={classes.subProductTitle} />
           <col />
         </colgroup>
-        <tbody>{subMaterialRows}</tbody>
+        <tbody>
+          <tr>
+            <td>
+              <Text weight={500}>Name</Text>
+            </td>
+            <td align="right">
+              <Text weight={500}>Quantity</Text>
+            </td>
+          </tr>
+          {subMaterialRows}
+        </tbody>
       </Table>
     </>
   );
+
+  const hasNoResult: boolean =
+    subProductRows.length === 0 && subMaterialRows.length === 0;
 
   return (
     <>
@@ -97,6 +121,12 @@ export const ViewProductDetailModal = ({
         onClose={() => onClose()}
         title={`#${product.id}: ${product.name}`}
       >
+        {hasNoResult ? (
+          <DimmedMessage
+            title={"No SubProducts/Materials tagged!"}
+            subtitle={"Click on the edit button to tag SubProducts/Materials"}
+          />
+        ) : null}
         {subProductRows.length > 0 ? subProductTable : null}
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
