@@ -1,21 +1,28 @@
-import { Grid, Modal, NumberInput, Select, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Grid,
+  Group,
+  Modal,
+  NumberInput,
+  Select,
+  TextInput,
+  Text,
+  Button,
+} from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMaterialGet } from "@/hooks/material";
 import { useProductGet } from "@/hooks/product";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
-import SelectIngredients from "./SelectIngredients";
+import { randomId } from "@mantine/hooks";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 
 const CreateProductModal = () => {
   const [opened, setOpened] = useState(false);
 
   const { data: materials = [] } = useMaterialGet();
   const { data: products = [] } = useProductGet();
-  const [subProductInputCount, setSubProductInputCount] = useState(1);
-  const [materialInputCount, setMaterialInputCount] = useState(1);
-  const [subProductIds, setSubProductIds] = useState([]);
-  const [materialIds, setMaterialIds] = useState([]);
 
   const form = useForm({
     initialValues: {
@@ -23,7 +30,8 @@ const CreateProductModal = () => {
       serving_size: undefined,
       serving_unit: "g",
       serving_per_package: 1,
-      ingredients: [],
+      subproducts: [{ id: undefined, size: undefined, key: randomId() }],
+      materials: [{ id: undefined, size: undefined, key: randomId() }],
     },
 
     validate: {
@@ -34,9 +42,99 @@ const CreateProductModal = () => {
     },
   });
 
+  type FormValues = typeof form.values;
+
   function handleClose() {
     setOpened(false);
     form.reset();
+  }
+
+  function getIngredientSelectData(target: string) {
+    if (target === "subproducts") {
+      return products.map((product) => {
+        const val = product.id ? product.id.toString() : "";
+        return { value: val, label: product.name };
+      });
+    }
+    return materials.map((material) => {
+      const val = material.id ? material.id.toString() : "";
+      return { value: val, label: material.name };
+    });
+  }
+
+  function renderIngredientsSelect(formValueTarget: string) {
+    const values: any = form.values;
+    return values[formValueTarget as keyof FormValues].map(
+      (item: any, index: number) => (
+        <Group key={item.key} mt="xs">
+          <Grid sx={{ width: "100%" }}>
+            <Grid.Col span={7}>
+              <Select
+                size="md"
+                data={getIngredientSelectData(formValueTarget)}
+                placeholder={
+                  formValueTarget === "subproducts"
+                    ? "Select Sub-Product"
+                    : "Select Material"
+                }
+                nothingFound="No search results"
+                searchable
+                clearable
+                transitionProps={{
+                  transition: "scale-y",
+                  duration: 150,
+                  exitDuration: 80,
+                  timingFunction: "ease",
+                }}
+                {...form.getInputProps(`${formValueTarget}.${index}.id`)}
+              />
+            </Grid.Col>
+            <Grid.Col span={4}>
+              <NumberInput
+                size="md"
+                placeholder="Size (in g or ml)"
+                min={1}
+                {...form.getInputProps(`${formValueTarget}.${index}.size`)}
+              />
+            </Grid.Col>
+            <Grid.Col span={1}>
+              <ActionIcon
+                variant="light"
+                color="pink"
+                size="lg"
+                disabled={
+                  values[formValueTarget as keyof FormValues].length <= 1
+                }
+                onClick={() => form.removeListItem(`${formValueTarget}`, index)}
+              >
+                <IconTrash size="1.25rem" />
+              </ActionIcon>
+            </Grid.Col>
+          </Grid>
+        </Group>
+      )
+    );
+  }
+
+  function renderAddIngredientButton(formValueTarget: string) {
+    return (
+      <Button
+        leftIcon={<IconPlus size={"1.25rem"} />}
+        variant="light"
+        sx={{ marginTop: 10 }}
+        onClick={() =>
+          form.insertListItem(`${formValueTarget}`, {
+            name: undefined,
+            active: undefined,
+            key: randomId(),
+          })
+        }
+      >
+        {formValueTarget === "subproducts"
+          ? "Add Sub-Products"
+          : "Add Materials"}
+      </Button>
+    );
   }
 
   const createProductFields = (
@@ -83,18 +181,32 @@ const CreateProductModal = () => {
           />
         </Grid.Col>
         <Grid.Col span={12}>
-          <SelectIngredients
-            ingredientType="product"
-            ingredients={products}
-            inputCount={subProductInputCount}
-          />
+          <Group>
+            <Grid sx={{ width: "100%" }}>
+              <Grid.Col span={7}>
+                <Text weight={500}>Sub-Products</Text>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <Text weight={500}>Size (in g or ml)</Text>
+              </Grid.Col>
+            </Grid>
+          </Group>
+          {renderIngredientsSelect("subproducts")}
+          {renderAddIngredientButton("subproducts")}
         </Grid.Col>
         <Grid.Col span={12}>
-          <SelectIngredients
-            ingredientType="material"
-            ingredients={materials}
-            inputCount={materialInputCount}
-          />
+          <Group>
+            <Grid sx={{ width: "100%" }}>
+              <Grid.Col span={7}>
+                <Text weight={500}>Materials</Text>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <Text weight={500}>Size (in g or ml)</Text>
+              </Grid.Col>
+            </Grid>
+          </Group>
+          {renderIngredientsSelect("materials")}
+          {renderAddIngredientButton("materials")}
         </Grid.Col>
       </Grid>
     </>
