@@ -1,14 +1,14 @@
 import { Box, Container, Group, Text } from "@mantine/core";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 import CreateProductModal from "@/components/products/CreateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import { Product } from "@/types/types";
 import { useProductGet } from "@/hooks/product";
-import { useQueryClient } from "react-query";
+import { Product } from "@/types/types";
 
 export default function Products() {
   const queryClient = useQueryClient();

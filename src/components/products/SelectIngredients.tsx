@@ -1,6 +1,3 @@
-import { useMaterialGet } from "@/hooks/material";
-import { useProductGet } from "@/hooks/product";
-import { Material, Product } from "@/types/types";
 import {
   ActionIcon,
   Box,
@@ -12,6 +9,9 @@ import {
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
+import { useMaterialGet } from "@/hooks/material";
+import { useProductGet } from "@/hooks/product";
+import { Material, Product } from "@/types/types";
 
 interface SelectIngredientsProp {
   ingredientType: string; //product or material

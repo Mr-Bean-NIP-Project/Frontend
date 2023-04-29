@@ -7,8 +7,11 @@ export const useMaterialGet = () => {
   return useQuery({
     queryKey: QUERY_KEYS.MATERIAL,
     queryFn: async () =>
-      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.MATERIAL}`))
-        .data as Material[],
+      (
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.MATERIAL}`
+        )
+      ).data as Material[],
   });
 };
 
@@ -16,7 +19,9 @@ export const useMaterialDelete = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: async (id: number) => {
       return (
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.MATERIAL}/${id}`)
+        await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.MATERIAL}/${id}`
+        )
       ).data as Material;
     },
     onSuccess: (data, materialId) => {
