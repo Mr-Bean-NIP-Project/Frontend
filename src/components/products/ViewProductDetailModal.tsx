@@ -23,7 +23,7 @@ interface ViewProductDetailModalProps {
   onClose(): void;
 }
 
-const ViewProductDetailModal = ({
+export const ViewProductDetailModal = ({
   product,
   modalState,
   onClose,
@@ -42,19 +42,22 @@ const ViewProductDetailModal = ({
     </tr>
   ));
   const subProductTable = (
-    <Table
-      withBorder
-      withColumnBorders
-      fontSize="md"
-      horizontalSpacing="md"
-      verticalSpacing="xs"
-    >
-      <colgroup>
-        <col className={classes.subProductTitle} />
-        <col />
-      </colgroup>
-      <tbody>{subProductRows}</tbody>
-    </Table>
+    <>
+      <Text>Sub Products ({subProductRows.length})</Text>
+      <Table
+        withBorder
+        withColumnBorders
+        fontSize="md"
+        horizontalSpacing="md"
+        verticalSpacing="xs"
+      >
+        <colgroup>
+          <col className={classes.subProductTitle} />
+          <col />
+        </colgroup>
+        <tbody>{subProductRows}</tbody>
+      </Table>
+    </>
   );
 
   const subMaterialRows = (product.material_product ?? []).map((mp) => (
@@ -68,19 +71,22 @@ const ViewProductDetailModal = ({
     </tr>
   ));
   const subMaterialTable = (
-    <Table
-      withBorder
-      withColumnBorders
-      fontSize="md"
-      horizontalSpacing="md"
-      verticalSpacing="xs"
-    >
-      <colgroup>
-        <col className={classes.subProductTitle} />
-        <col />
-      </colgroup>
-      <tbody>{subMaterialRows}</tbody>
-    </Table>
+    <>
+      <Text>Materials ({subMaterialRows.length})</Text>
+      <Table
+        withBorder
+        withColumnBorders
+        fontSize="md"
+        horizontalSpacing="md"
+        verticalSpacing="xs"
+      >
+        <colgroup>
+          <col className={classes.subProductTitle} />
+          <col />
+        </colgroup>
+        <tbody>{subMaterialRows}</tbody>
+      </Table>
+    </>
   );
 
   return (

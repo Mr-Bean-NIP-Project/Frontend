@@ -12,6 +12,8 @@ import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import { useProductDelete, useProductGet } from "@/hooks/product";
 import { ModalStateEnum } from "@/types/constants";
+import { Product } from "../../types/types";
+import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 
 export default function Products() {
   const queryClient = useQueryClient();
@@ -23,10 +25,17 @@ export default function Products() {
     ModalStateEnum.Hidden
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productTarget, setProductTarget] = useState<Product | undefined>();
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${products.length} product(s)`
     : `Products (${products.length})`;
+
+  const handleView = (product: Product) => {
+    if (!product) return;
+    setModalState(ModalStateEnum.View);
+    setProductTarget(product);
+  };
 
   useEffect(() => setSearchResults(products), [products]);
 
@@ -55,6 +64,7 @@ export default function Products() {
 
   function handleClose() {
     setIsModalOpen(false);
+    setProductTarget(undefined);
   }
 
   const deleteMutation = useProductDelete(queryClient);
@@ -90,7 +100,13 @@ export default function Products() {
       const subtitle = "Click 'Create Product' to create a new product!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
-    return <ProductTable products={searchResults} onDelete={handleDelete} />;
+    return (
+      <ProductTable
+        products={searchResults}
+        onDelete={handleDelete}
+        onView={handleView}
+      />
+    );
   }
 
   return (
@@ -113,6 +129,11 @@ export default function Products() {
             <CreateProductModal
               modalState={modalState}
               isModalOpen={isModalOpen}
+              onClose={handleClose}
+            />
+            <ViewProductDetailModal
+              product={productTarget}
+              modalState={modalState}
               onClose={handleClose}
             />
           </Group>
