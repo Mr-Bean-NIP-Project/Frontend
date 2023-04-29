@@ -72,6 +72,7 @@ const CreateUpdateSupplierModal = ({
           icon: <IconCheck />,
           message: `New supplier ${data.name} of id: ${data.id} created!`,
         });
+        handleClose();
       } catch (error: any) {
         notifications.show({
           title: "Error Creating Supplier",
@@ -93,6 +94,7 @@ const CreateUpdateSupplierModal = ({
           icon: <IconCheck />,
           message: `Supplier ${data.name} of id: ${data.id} updated!`,
         });
+        handleClose();
       } catch (error: any) {
         notifications.show({
           title: "Error Updating Supplier",
@@ -102,7 +104,6 @@ const CreateUpdateSupplierModal = ({
         });
       }
     }
-    handleClose();
   }
 
   return (
