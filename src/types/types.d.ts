@@ -34,14 +34,16 @@ export type Product = {
   name: string;
   serving_size: number;
   serving_unit: string;
-  service_per_package: number;
-
-  sub_product_ids: number[];
+  serving_per_package: number;
 
   // to get from BE
   id?: number;
   created_at?: string;
   updated_at?: string;
+
+  // for create
+  sub_product_id_and_quantity?: any[];
+  material_id_and_quantity?: any[];
 };
 
 export type ColumnArgument = {

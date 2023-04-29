@@ -9,29 +9,56 @@ import {
   Text,
   Button,
 } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
-import { useEffect, useState } from "react";
+import { TransformedValues, isNotEmpty, useForm } from "@mantine/form";
 import { useMaterialGet } from "@/hooks/material";
-import { useProductGet } from "@/hooks/product";
-import LargeCreateButton from "../shared/LargeCreateButton";
+import { useProductCreate, useProductGet } from "@/hooks/product";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 import { randomId } from "@mantine/hooks";
-import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconCheck, IconPlus, IconTrash, IconX } from "@tabler/icons-react";
+import { ModalStateEnum } from "@/types/constants";
+import { useQueryClient } from "react-query";
+import { notifications } from "@mantine/notifications";
+import { Product } from "@/types/types";
 
-const CreateProductModal = () => {
-  const [opened, setOpened] = useState(false);
+interface CreateProductModalProps {
+  modalState: ModalStateEnum;
+  // use isModalOpen for opening and closing of this modal instead of modifying modal state
+  isModalOpen: boolean;
+  onClose(): void;
+}
 
+const CreateProductModal = ({
+  modalState,
+  isModalOpen,
+  onClose,
+}: CreateProductModalProps) => {
+  const queryClient = useQueryClient();
   const { data: materials = [] } = useMaterialGet();
   const { data: products = [] } = useProductGet();
+
+  function transformIngredients(values: any, ingredientType: string) {
+    if (ingredientType === "product") {
+      return values.subproducts
+        .filter((item: any) => item.id && item.quantity)
+        .map((item: any) => {
+          return { product_id: Number(item.id), quantity: item.quantity };
+        });
+    }
+    return values.materials
+      .filter((item: any) => item.id && item.quantity)
+      .map((item: any) => {
+        return { material_id: Number(item.id), quantity: item.quantity };
+      });
+  }
 
   const form = useForm({
     initialValues: {
       name: "",
-      serving_size: undefined,
+      serving_size: 0,
       serving_unit: "g",
       serving_per_package: 1,
-      subproducts: [{ id: undefined, size: undefined, key: randomId() }],
-      materials: [{ id: undefined, size: undefined, key: randomId() }],
+      subproducts: [{ id: undefined, quantity: 0, key: randomId() }],
+      materials: [{ id: undefined, quantity: 0, key: randomId() }],
     },
 
     validate: {
@@ -40,13 +67,49 @@ const CreateProductModal = () => {
       serving_unit: isNotEmpty("Service unit cannot be empty."),
       serving_per_package: isNotEmpty("Service per package cannot be empty."),
     },
+
+    transformValues: (values) => ({
+      name: values.name,
+      serving_size: values.serving_size,
+      serving_unit: values.serving_unit,
+      serving_per_package: values.serving_per_package,
+      sub_product_id_and_quantity: transformIngredients(values, "product"),
+      material_id_and_quantity: transformIngredients(values, "material"),
+    }),
   });
 
   type FormValues = typeof form.values;
 
+  const createMutation = useProductCreate(queryClient);
+
   function handleClose() {
-    setOpened(false);
+    onClose();
     form.reset();
+  }
+
+  async function handleSubmit(values: TransformedValues<typeof form>) {
+    if (modalState === ModalStateEnum.Create) {
+      const newProduct: Product = {
+        ...values,
+      };
+      try {
+        const data = await createMutation.mutateAsync(newProduct);
+        notifications.show({
+          title: "Create Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `New Product ${data.name} of id: ${data.id} created!`,
+        });
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Creating Product",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
+    }
+    handleClose();
   }
 
   function getIngredientSelectData(target: string) {
@@ -80,6 +143,7 @@ const CreateProductModal = () => {
                 nothingFound="No search results"
                 searchable
                 clearable
+                maxDropdownHeight={300}
                 transitionProps={{
                   transition: "scale-y",
                   duration: 150,
@@ -94,7 +158,8 @@ const CreateProductModal = () => {
                 size="md"
                 placeholder="Size (in g or ml)"
                 min={1}
-                {...form.getInputProps(`${formValueTarget}.${index}.size`)}
+                step={10}
+                {...form.getInputProps(`${formValueTarget}.${index}.quantity`)}
               />
             </Grid.Col>
             <Grid.Col span={1}>
@@ -151,9 +216,10 @@ const CreateProductModal = () => {
         <Grid.Col span={6}>
           <NumberInput
             size="md"
-            label="Serving Size"
-            placeholder="Serving Size"
+            label="Serving Size (in g or ml)"
+            placeholder="Serving Size (in g or ml)"
             min={1}
+            step={10}
             {...form.getInputProps("serving_size")}
           />
         </Grid.Col>
@@ -213,26 +279,19 @@ const CreateProductModal = () => {
   );
 
   return (
-    <>
-      <Modal
-        size="xl"
-        opened={opened}
-        closeOnClickOutside={false}
-        closeOnEscape={false}
-        onClose={handleClose}
-        title="Create Product"
-      >
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
-          {createProductFields}
-          <SubmitButtonInModal title="Create" />
-        </form>
-      </Modal>
-
-      <LargeCreateButton
-        title="Create Product"
-        onClick={() => setOpened(true)}
-      />
-    </>
+    <Modal
+      size="xl"
+      opened={isModalOpen}
+      closeOnClickOutside={false}
+      closeOnEscape={false}
+      onClose={handleClose}
+      title="Create Product"
+    >
+      <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+        {createProductFields}
+        <SubmitButtonInModal title="Create" />
+      </form>
+    </Modal>
   );
 };
 
