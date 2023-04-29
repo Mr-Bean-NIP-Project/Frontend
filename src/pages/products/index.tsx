@@ -1,8 +1,6 @@
 import { Box, Container, Group, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import CreateProductModal from "@/components/products/CreateProductModal";
 import ProductTable from "@/components/products/ProductTable";
@@ -10,8 +8,9 @@ import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import { useProductDelete, useProductGet } from "@/hooks/product";
+import { useProductGet } from "@/hooks/product";
 import { ModalStateEnum } from "@/types/constants";
+import { Product } from "@/types/types";
 
 export default function Products() {
   const queryClient = useQueryClient();
@@ -57,30 +56,6 @@ export default function Products() {
     setIsModalOpen(false);
   }
 
-  const deleteMutation = useProductDelete(queryClient);
-
-  const handleDelete = useCallback(
-    async (id: number) => {
-      try {
-        const data = await deleteMutation.mutateAsync(id);
-        notifications.show({
-          title: "Delete Successful",
-          color: "green",
-          icon: <IconCheck />,
-          message: `Product ${data.name} has been deleted.`,
-        });
-      } catch (error: any) {
-        notifications.show({
-          title: "Error Deleting Product",
-          color: "red",
-          icon: <IconX />,
-          message: error.response.data.message,
-        });
-      }
-    },
-    [deleteMutation]
-  );
-
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -90,7 +65,7 @@ export default function Products() {
       const subtitle = "Click 'Create Product' to create a new product!";
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
-    return <ProductTable products={searchResults} onDelete={handleDelete} />;
+    return <ProductTable products={searchResults} />;
   }
 
   return (

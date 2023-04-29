@@ -15,23 +15,6 @@ export const useProductGet = () => {
   });
 };
 
-export const useProductDelete = (queryClient: QueryClient) => {
-  return useMutation({
-    mutationFn: async (id: number) => {
-      return (
-        await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.PRODUCT}/${id}`
-        )
-      ).data as Product;
-    },
-    onSuccess: (data, productId) => {
-      queryClient.setQueryData<Product[]>(QUERY_KEYS.PRODUCT, (old = []) => {
-        return old.filter((sup) => sup.id !== productId); // removes deleted supplier locally
-      });
-    },
-  });
-};
-
 export const useProductCreate = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: async (newProduct: Product) => {
