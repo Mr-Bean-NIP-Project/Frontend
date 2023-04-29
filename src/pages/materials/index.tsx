@@ -24,19 +24,20 @@ export default function Materials() {
   const [modalState, setModalState] = useState<ModalStateEnum>(
     ModalStateEnum.Hidden
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [materialTarget, setMaterialTarget] = useState<Material | undefined>();
 
   useEffect(() => setSearchResults(materials), [materials]);
+
+  const headerText: string = isSearching
+    ? `Showing ${searchResults.length} of ${materials.length} raw material(s)`
+    : `Raw Materials (${materials.length})`;
 
   const handleView = (material: Material) => {
     if (!material) return;
     setModalState(ModalStateEnum.View);
     setMaterialTarget(material);
   };
-
-  const headerText: string = isSearching
-    ? `Showing ${searchResults.length} of ${materials.length} raw material(s)`
-    : `Raw Materials (${materials.length})`;
 
   const handleSearch = (searchStr: string) => {
     if (searchStr.length === 0) {
@@ -57,7 +58,7 @@ export default function Materials() {
   };
 
   function handleClose() {
-    setModalState(ModalStateEnum.Hidden);
+    setIsModalOpen(false);
     setMaterialTarget(undefined);
   }
 
@@ -84,9 +85,15 @@ export default function Materials() {
     [deleteMutation]
   );
 
+  function handleClickCreate() {
+    setModalState(ModalStateEnum.Create);
+    setIsModalOpen(true);
+  }
+
   function handleClickEdit(material: Material) {
     if (!material) return;
     setModalState(ModalStateEnum.Update);
+    setIsModalOpen(true);
     setMaterialTarget(material);
   }
 
@@ -129,11 +136,12 @@ export default function Materials() {
             </Text>
             <LargeCreateButton
               title="Create Material"
-              onClick={() => setModalState(ModalStateEnum.Create)}
+              onClick={handleClickCreate}
             />
             <CreateUpdateMaterialModal
               materialToUpdate={materialTarget}
               modalState={modalState}
+              isModalOpen={isModalOpen}
               onClose={handleClose}
             />
             <ViewMaterialDetailModal

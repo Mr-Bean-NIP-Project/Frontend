@@ -29,12 +29,15 @@ import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 interface CreateUpdateMaterialModalProps {
   materialToUpdate?: Material;
   modalState: ModalStateEnum;
+  // use isModalOpen for opening and closing of this modal instead of modifying modal state
+  isModalOpen: boolean;
   onClose(): void;
 }
 
 const CreateUpdateMaterialModal = ({
   materialToUpdate,
   modalState,
+  isModalOpen,
   onClose,
 }: CreateUpdateMaterialModalProps) => {
   const queryClient = useQueryClient();
@@ -255,10 +258,7 @@ const CreateUpdateMaterialModal = ({
     <>
       <Modal
         size="xl"
-        opened={
-          modalState === ModalStateEnum.Create ||
-          modalState === ModalStateEnum.Update
-        }
+        opened={isModalOpen}
         closeOnClickOutside={false}
         closeOnEscape={false}
         onClose={handleClose}

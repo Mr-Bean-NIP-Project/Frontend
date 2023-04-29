@@ -2,7 +2,7 @@ import { Modal, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { ModalStateEnum } from "@/types/constants";
 import { Supplier } from "@/types/types";
@@ -12,12 +12,15 @@ import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 interface CreateUpdateSupplierModalProps {
   supplierToUpdate?: Supplier;
   modalState: ModalStateEnum;
+  // use isModalOpen for opening and closing of this modal instead of modifying modal state
+  isModalOpen: boolean;
   onClose(): void;
 }
 
 const CreateUpdateSupplierModal = ({
   supplierToUpdate,
   modalState,
+  isModalOpen,
   onClose,
 }: CreateUpdateSupplierModalProps) => {
   const queryClient = useQueryClient();
@@ -106,10 +109,7 @@ const CreateUpdateSupplierModal = ({
     <>
       <Modal
         size="lg"
-        opened={
-          modalState === ModalStateEnum.Create ||
-          modalState === ModalStateEnum.Update
-        }
+        opened={isModalOpen}
         closeOnClickOutside={false}
         closeOnEscape={false}
         onClose={handleClose}
