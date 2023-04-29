@@ -100,6 +100,7 @@ const CreateProductModal = ({
           icon: <IconCheck />,
           message: `New Product ${data.name} of id: ${data.id} created!`,
         });
+        handleClose();
       } catch (error: any) {
         notifications.show({
           title: "Error Creating Product",
@@ -109,7 +110,6 @@ const CreateProductModal = ({
         });
       }
     }
-    handleClose();
   }
 
   function getIngredientSelectData(target: string) {
