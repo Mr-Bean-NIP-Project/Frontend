@@ -68,7 +68,7 @@ const CreateUpdateMaterialModal = ({
     },
 
     transformValues: (values) => ({
-      ...values,
+      name: values.name,
       supplier_id: Number(values.supplier_id),
       energy: divideNutriValue(NUTRITION.ENERGY, values.energy),
       protein: divideNutriValue(NUTRITION.PROTEIN, values.protein),
@@ -138,6 +138,7 @@ const CreateUpdateMaterialModal = ({
           icon: <IconCheck />,
           message: `New Material ${data.name} of id: ${data.id} created!`,
         });
+        handleClose();
       } catch (error: any) {
         notifications.show({
           title: "Error Creating Material",
@@ -169,6 +170,7 @@ const CreateUpdateMaterialModal = ({
           icon: <IconCheck />,
           message: `Material ${data.name} of id: ${data.id} updated!`,
         });
+        handleClose();
       } catch (error: any) {
         notifications.show({
           title: "Error Updating Material",
@@ -178,7 +180,6 @@ const CreateUpdateMaterialModal = ({
         });
       }
     }
-    handleClose();
   }
 
   const nutritionalFields: JSX.Element[] = [];
@@ -195,6 +196,7 @@ const CreateUpdateMaterialModal = ({
               placeholder={nutriText}
               size="sm"
               min={0}
+              step={10}
               sx={{
                 width: "50%",
                 input: { textAlign: "right", paddingRight: "2.25rem" },
