@@ -23,6 +23,7 @@ export default function Suppliers() {
   const [modalState, setModalState] = useState<ModalStateEnum>(
     ModalStateEnum.Hidden
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [supplierToUpdate, setSupplierToUpdate] = useState<
     Supplier | undefined
   >();
@@ -76,13 +77,19 @@ export default function Suppliers() {
   );
 
   function handleClose() {
-    setModalState(ModalStateEnum.Hidden);
+    setIsModalOpen(false);
     setSupplierToUpdate(undefined);
+  }
+
+  function handleClickCreate() {
+    setModalState(ModalStateEnum.Create);
+    setIsModalOpen(true);
   }
 
   function handleClickEdit(supplier: Supplier) {
     if (!supplier) return;
     setModalState(ModalStateEnum.Update);
+    setIsModalOpen(true);
     setSupplierToUpdate(supplier);
   }
 
@@ -124,11 +131,12 @@ export default function Suppliers() {
             </Text>
             <LargeCreateButton
               title="Create Supplier"
-              onClick={() => setModalState(ModalStateEnum.Create)}
+              onClick={handleClickCreate}
             />
             <CreateUpdateSupplierModal
               supplierToUpdate={supplierToUpdate}
               modalState={modalState}
+              isModalOpen={isModalOpen}
               onClose={handleClose}
             />
           </Group>
