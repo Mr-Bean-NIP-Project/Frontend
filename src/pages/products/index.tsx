@@ -5,16 +5,23 @@ import { useQueryClient } from "react-query";
 import CreateProductModal from "@/components/products/CreateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
+import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import { useProductGet } from "@/hooks/product";
+import { ModalStateEnum } from "@/types/constants";
 import { Product } from "@/types/types";
 
 export default function Products() {
   const queryClient = useQueryClient();
   const { data: products = [] } = useProductGet();
+
   const [searchResults, setSearchResults] = useState(products);
   const [isSearching, setIsSearching] = useState(false);
+  const [modalState, setModalState] = useState<ModalStateEnum>(
+    ModalStateEnum.Hidden
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${products.length} product(s)`
@@ -39,6 +46,15 @@ export default function Products() {
     );
     setSearchResults(results);
   };
+
+  function handleClickCreate() {
+    setModalState(ModalStateEnum.Create);
+    setIsModalOpen(true);
+  }
+
+  function handleClose() {
+    setIsModalOpen(false);
+  }
 
   function renderBody() {
     if (searchResults.length === 0) {
@@ -65,7 +81,15 @@ export default function Products() {
             <Text size="2rem" weight={600}>
               {headerText}
             </Text>
-            <CreateProductModal />
+            <LargeCreateButton
+              title="Create Product"
+              onClick={handleClickCreate}
+            />
+            <CreateProductModal
+              modalState={modalState}
+              isModalOpen={isModalOpen}
+              onClose={handleClose}
+            />
           </Group>
           <SharedSearchBar onSearch={handleSearch} />
           <Box>{renderBody()}</Box>
