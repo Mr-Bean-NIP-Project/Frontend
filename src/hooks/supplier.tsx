@@ -7,8 +7,11 @@ export const useSupplierGet = () => {
   return useQuery({
     queryKey: QUERY_KEYS.SUPPLIER,
     queryFn: async () =>
-      (await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/supplier`))
-        .data as Supplier[],
+      (
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.SUPPLIER}`
+        )
+      ).data as Supplier[],
   });
 };
 
@@ -16,7 +19,9 @@ export const useSupplierDelete = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: async (id: number) => {
       return (
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/supplier/${id}`)
+        await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.SUPPLIER}/${id}`
+        )
       ).data as Supplier;
     },
     onSuccess: (data, supplierId) => {
@@ -32,7 +37,7 @@ export const useSupplierCreate = (queryClient: QueryClient) => {
     mutationFn: async (newSupplier: Supplier) => {
       return (
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/supplier`,
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.SUPPLIER}`,
           newSupplier
         )
       ).data as Supplier;
@@ -50,7 +55,7 @@ export const useSupplierUpdate = (queryClient: QueryClient) => {
     mutationFn: async (newSupplier: Supplier) => {
       return (
         await axios.patch(
-          `${process.env.NEXT_PUBLIC_API_URL}/supplier/${newSupplier.id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.SUPPLIER}/${newSupplier.id}`,
           { name: newSupplier.name }
         )
       ).data;

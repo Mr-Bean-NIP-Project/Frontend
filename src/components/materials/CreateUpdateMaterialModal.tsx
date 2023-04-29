@@ -232,7 +232,7 @@ const CreateUpdateMaterialModal = ({
             data={getSupplierSelectData()}
             label="Supplier"
             placeholder="Select Supplier"
-            nothingFound="No supplier found"
+            nothingFound="No matching suppliers found"
             searchable
             clearable
             transitionProps={{

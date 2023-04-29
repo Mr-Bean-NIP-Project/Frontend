@@ -1,12 +1,21 @@
 import { Grid, Modal, NumberInput, Select, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useState } from "react";
+import { useMaterialGet } from "@/hooks/material";
+import { useProductGet } from "@/hooks/product";
 import LargeCreateButton from "../shared/LargeCreateButton";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 import SelectIngredients from "./SelectIngredients";
 
 const CreateProductModal = () => {
   const [opened, setOpened] = useState(false);
+
+  const { data: materials = [] } = useMaterialGet();
+  const { data: products = [] } = useProductGet();
+  const [subProductInputCount, setSubProductInputCount] = useState(1);
+  const [materialInputCount, setMaterialInputCount] = useState(1);
+  const [subProductIds, setSubProductIds] = useState([]);
+  const [materialIds, setMaterialIds] = useState([]);
 
   const form = useForm({
     initialValues: {
@@ -74,7 +83,18 @@ const CreateProductModal = () => {
           />
         </Grid.Col>
         <Grid.Col span={12}>
-          <SelectIngredients />
+          <SelectIngredients
+            ingredientType="product"
+            ingredients={products}
+            inputCount={subProductInputCount}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <SelectIngredients
+            ingredientType="material"
+            ingredients={materials}
+            inputCount={materialInputCount}
+          />
         </Grid.Col>
       </Grid>
     </>

@@ -1,43 +1,26 @@
 import { Box, Container, Group, Text } from "@mantine/core";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 import CreateProductModal from "@/components/products/CreateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
+import { useProductGet } from "@/hooks/product";
 import { Product } from "@/types/types";
 
-const products: Product[] = [
-  {
-    id: 75,
-    name: "Strawberry Beancurd",
-    serving_size: 250,
-    serving_unit: "g",
-    service_per_package: 1,
-    sub_product_ids: [],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 76,
-    name: "Banana Beancurd",
-    serving_size: 250,
-    serving_unit: "g",
-    service_per_package: 1,
-    sub_product_ids: [],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
-
 export default function Products() {
+  const queryClient = useQueryClient();
+  const { data: products = [] } = useProductGet();
   const [searchResults, setSearchResults] = useState(products);
   const [isSearching, setIsSearching] = useState(false);
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${products.length} product(s)`
     : `Products (${products.length})`;
+
+  useEffect(() => setSearchResults(products), [products]);
 
   const handleSearch = (searchStr: string) => {
     if (searchStr.length === 0) {
