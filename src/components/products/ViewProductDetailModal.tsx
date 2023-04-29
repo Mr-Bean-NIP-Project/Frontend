@@ -20,15 +20,22 @@ interface ViewProductDetailModalProps {
   onClose(): void;
 }
 
+interface ViewProductDetailModalComponentProps {
+  product: Product;
+  product_id: number;
+  modalState: ModalStateEnum;
+  onClose(): void;
+}
+
 const NAME_WIDTH = "75%";
 
-export const ViewProductDetailModal = ({
+const ViewProductDetailModalComponent = ({
   product,
+  product_id,
   modalState,
   onClose,
-}: ViewProductDetailModalProps) => {
-  if (!product || !product.id) return null;
-  const { data: nip } = useProductGetNip(product.id);
+}: ViewProductDetailModalComponentProps) => {
+  const { data: nip } = useProductGetNip(product_id);
 
   const tableHeaders = (
     <tr>
@@ -136,5 +143,22 @@ export const ViewProductDetailModal = ({
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
     </>
+  );
+};
+
+export const ViewProductDetailModal = ({
+  product,
+  modalState,
+  onClose,
+}: ViewProductDetailModalProps) => {
+  if (!product || !product.id) return null;
+  // so we avoid calling useProductGetNip hook conditionally
+  return (
+    <ViewProductDetailModalComponent
+      product={product}
+      product_id={product.id}
+      modalState={modalState}
+      onClose={onClose}
+    />
   );
 };
