@@ -8,6 +8,7 @@ export const enum ModalStateEnum {
 export const QUERY_KEYS = {
   SUPPLIER: ["supplier"],
   MATERIAL: ["material"],
+  PRODUCT: ["product"]
 };
 
 export const TABLE_ID_WIDTH = "10%";
