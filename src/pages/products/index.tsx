@@ -5,12 +5,12 @@ import { useQueryClient } from "react-query";
 import CreateProductModal from "@/components/products/CreateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
+import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import { useProductGet } from "@/hooks/product";
-import { Product } from "@/types/types";
 import { ModalStateEnum } from "@/types/constants";
-import LargeCreateButton from "@/components/shared/LargeCreateButton";
+import { Product } from "@/types/types";
 
 export default function Products() {
   const queryClient = useQueryClient();

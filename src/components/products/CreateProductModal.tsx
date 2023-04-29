@@ -10,15 +10,15 @@ import {
   Button,
 } from "@mantine/core";
 import { TransformedValues, isNotEmpty, useForm } from "@mantine/form";
+import { randomId } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconPlus, IconTrash, IconX } from "@tabler/icons-react";
+import { useQueryClient } from "react-query";
 import { useMaterialGet } from "@/hooks/material";
 import { useProductCreate, useProductGet } from "@/hooks/product";
-import SubmitButtonInModal from "../shared/SubmitButtonInModal";
-import { randomId } from "@mantine/hooks";
-import { IconCheck, IconPlus, IconTrash, IconX } from "@tabler/icons-react";
 import { ModalStateEnum } from "@/types/constants";
-import { useQueryClient } from "react-query";
-import { notifications } from "@mantine/notifications";
 import { Product } from "@/types/types";
+import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
 interface CreateProductModalProps {
   modalState: ModalStateEnum;
