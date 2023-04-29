@@ -12,9 +12,10 @@ import EditActionButton from "../shared/EditActionButton";
 
 interface ProductTableProps {
   products: Product[];
+  onDelete(id?: number): void;
 }
 
-const ProductTable = ({ products }: ProductTableProps) => {
+const ProductTable = ({ products, onDelete }: ProductTableProps) => {
   const rows = useMemo(
     () =>
       products.map((product) => (
@@ -36,16 +37,14 @@ const ProductTable = ({ products }: ProductTableProps) => {
                 }}
               />
               <DeleteActionButton
-                onDelete={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-                itemName={""}
+                onDelete={() => onDelete(product.id)}
+                itemName={product.name}
               />
             </Group>
           </td>
         </tr>
       )),
-    [products]
+    [products, onDelete]
   );
 
   return (
