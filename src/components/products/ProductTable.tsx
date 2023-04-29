@@ -9,13 +9,15 @@ import { Product } from "@/types/types";
 import { formatDate } from "../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
+import ViewActionButton from "../shared/ViewActionButton";
 
 interface ProductTableProps {
   products: Product[];
   onDelete(id?: number): void;
+  onView(product: Product): void;
 }
 
-const ProductTable = ({ products, onDelete }: ProductTableProps) => {
+const ProductTable = ({ products, onDelete, onView }: ProductTableProps) => {
   const rows = useMemo(
     () =>
       products.map((product) => (
@@ -31,6 +33,7 @@ const ProductTable = ({ products, onDelete }: ProductTableProps) => {
           <td width={TABLE_DATE_WIDTH}>{formatDate(product.updated_at)}</td>
           <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
+              <ViewActionButton onClick={() => onView(product)} />
               <EditActionButton
                 onClick={function (): void {
                   throw new Error("Function not implemented.");
@@ -44,7 +47,7 @@ const ProductTable = ({ products, onDelete }: ProductTableProps) => {
           </td>
         </tr>
       )),
-    [products, onDelete]
+    [products, onDelete, onView]
   );
 
   return (
