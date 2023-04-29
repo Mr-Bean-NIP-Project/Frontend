@@ -30,6 +30,28 @@ export type Material = {
   supplier_id?: number;
 };
 
+export type ProductSubProduct = {
+  id: number;
+  parent_id: number;
+  child_id: number;
+  quantity: number;
+  created_at: string;
+  updated_at: string;
+  child: Product;
+  parent?: Product;
+};
+
+export type MaterialProduct = {
+  id: number;
+  material_id: number;
+  product_id: number;
+  material_quantity: number;
+  created_at: string;
+  updated_at: string;
+  material: Material;
+  product?: Product;
+};
+
 export type Product = {
   name: string;
   serving_size: number;
@@ -44,6 +66,10 @@ export type Product = {
   // for create
   sub_product_id_and_quantity?: any[];
   material_id_and_quantity?: any[];
+
+  // for viewing
+  product_sub_products?: ProductSubProduct[];
+  material_product?: MaterialProduct[];
 };
 
 export type ColumnArgument = {
