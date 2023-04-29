@@ -26,7 +26,17 @@ export const useProductDelete = (queryClient: QueryClient) => {
     },
     onSuccess: (data, productId) => {
       queryClient.setQueryData<Product[]>(QUERY_KEYS.PRODUCT, (old = []) => {
-        return old.filter((sup) => sup.id !== productId); // removes deleted supplier locally
+        return old
+          .filter((prod) => prod.id !== productId)
+          .map((prod) => {
+            // remove self as sub product from other parent products
+            if (prod.product_sub_products) {
+              prod.product_sub_products = prod.product_sub_products.filter(
+                (sp) => sp.child.id !== productId
+              );
+            }
+            return prod;
+          }); // removes deleted product locally
       });
     },
   });
