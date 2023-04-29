@@ -22,16 +22,16 @@ export enum NUTRITION_DP {
 }
 
 export enum NUTRITION {
-  SODIUM = "sodium",
-  CHOLESTEROL = "cholesterol",
+  ENERGY = "energy",
   PROTEIN = "protein",
   TOTAL_FAT = "total_fat",
   SATURATED_FAT = "saturated_fat",
   TRANS_FAT = "trans_fat",
+  CHOLESTEROL = "cholesterol",
   CARBOHYDRATE = "carbohydrate",
   SUGARS = "sugars",
   DIETARY_FIBRE = "dietary_fibre",
-  ENERGY = "energy",
+  SODIUM = "sodium",
 }
 
 export const NUTRITION_MG = [NUTRITION.SODIUM, NUTRITION.CHOLESTEROL];
