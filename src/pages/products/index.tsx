@@ -12,8 +12,8 @@ import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import { useProductDelete, useProductGet } from "@/hooks/product";
 import { ModalStateEnum } from "@/types/constants";
-import { Product } from "../../types/types";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
+import { Product } from "../../types/types";
 
 export default function Products() {
   const queryClient = useQueryClient();

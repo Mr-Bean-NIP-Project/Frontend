@@ -7,6 +7,28 @@ export type Supplier = {
   updated_at?: string;
 };
 
+export type NIP = {
+  name: string;
+  serving_size: number;
+  serving_unit: string;
+  serving_per_package: number;
+  per_serving: Nutrition;
+  per_hundred: Nutrition;
+};
+
+export class Nutrition {
+  energy: string;
+  protein: string;
+  total_fat: string;
+  saturated_fat: string;
+  trans_fat: string;
+  cholesterol: string;
+  carbohydrate: string;
+  sugars: string;
+  dietary_fibre: string;
+  sodium: string;
+}
+
 export type Material = {
   name: string;
   energy: string;

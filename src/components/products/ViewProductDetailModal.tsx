@@ -7,9 +7,12 @@ import {
   Text,
   createStyles,
 } from "@mantine/core";
+import { useProductGetNip } from "../../hooks/product";
 import { ModalStateEnum } from "../../types/constants";
 import { Product } from "../../types/types";
+import { isEmpty } from "../../util";
 import DimmedMessage from "../shared/DimmedMessage";
+import { NutritionInformationTable } from "../shared/NutritionInformationPanel";
 
 interface ViewProductDetailModalProps {
   product: Product | undefined;
@@ -24,7 +27,8 @@ export const ViewProductDetailModal = ({
   modalState,
   onClose,
 }: ViewProductDetailModalProps) => {
-  if (!product) return null;
+  if (!product || !product.id) return null;
+  const { data: nip } = useProductGetNip(product.id);
 
   const tableHeaders = (
     <tr>
@@ -104,7 +108,10 @@ export const ViewProductDetailModal = ({
   );
 
   const hasNoResult: boolean =
-    subProductRows.length === 0 && subMaterialRows.length === 0;
+    subProductRows.length === 0 &&
+    subMaterialRows.length === 0 &&
+    (isEmpty(nip?.per_hundred) ?? false) &&
+    (isEmpty(nip?.per_serving) ?? false);
 
   return (
     <>
@@ -120,6 +127,11 @@ export const ViewProductDetailModal = ({
             subtitle={"Edit this product to tag sub-products or materials!"}
           />
         ) : null}
+        {NutritionInformationTable(nip?.per_serving, "Nutrition Per Serving")}
+        {NutritionInformationTable(
+          nip?.per_hundred,
+          `Nutrition Per 100${nip?.serving_unit}`
+        )}
         {subProductRows.length > 0 ? subProductTable : null}
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
