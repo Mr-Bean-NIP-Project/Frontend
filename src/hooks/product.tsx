@@ -61,6 +61,31 @@ export const useProductCreate = (queryClient: QueryClient) => {
   });
 };
 
+export const useProductUpdate = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const payloadWithoutId = Object.fromEntries(
+        Object.entries(payload).filter(([key]) => !["id"].includes(key))
+      );
+      return (
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.PRODUCT}/${payload.id}`,
+          payloadWithoutId
+        )
+      ).data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData<Product[]>(QUERY_KEYS.PRODUCT, (old = []) => {
+        const oldDataIndex = old.findIndex((prod) => prod.id === data.id);
+        if (oldDataIndex === -1) return old;
+        old[oldDataIndex] = { ...data }; // replaces old Product info with newly updated Product
+        return old;
+      });
+      queryClient.removeQueries(QUERY_KEYS.PRODUCT_NIP); // remove all NIP if Product is updated
+    },
+  });
+};
+
 export const useProductGetNip = (id: number) => {
   return useQuery({
     queryKey: QUERY_KEYS.PRODUCT_NIP_ID(id),

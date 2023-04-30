@@ -15,9 +15,15 @@ interface ProductTableProps {
   products: Product[];
   onDelete(id?: number): void;
   onView(product: Product): void;
+  onEdit(product: Product): void;
 }
 
-const ProductTable = ({ products, onDelete, onView }: ProductTableProps) => {
+const ProductTable = ({
+  products,
+  onDelete,
+  onView,
+  onEdit,
+}: ProductTableProps) => {
   const rows = useMemo(
     () =>
       products.map((product) => (
@@ -34,11 +40,7 @@ const ProductTable = ({ products, onDelete, onView }: ProductTableProps) => {
           <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
               <ViewActionButton onClick={() => onView(product)} />
-              <EditActionButton
-                onClick={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
+              <EditActionButton onClick={() => onEdit(product)} />
               <DeleteActionButton
                 onDelete={() => onDelete(product.id)}
                 itemName={product.name}
@@ -47,7 +49,7 @@ const ProductTable = ({ products, onDelete, onView }: ProductTableProps) => {
           </td>
         </tr>
       )),
-    [products, onDelete, onView]
+    [products, onDelete, onView, onEdit]
   );
 
   return (

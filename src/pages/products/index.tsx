@@ -4,7 +4,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
-import CreateProductModal from "@/components/products/CreateProductModal";
+import CreateUpdateProductModal from "@/components/products/CreateUpdateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
@@ -91,6 +91,13 @@ export default function Products() {
     [deleteMutation]
   );
 
+  function handleClickEdit(product: Product) {
+    if (!product) return;
+    setModalState(ModalStateEnum.Update);
+    setIsModalOpen(true);
+    setProductTarget(product);
+  }
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -105,6 +112,7 @@ export default function Products() {
         products={searchResults}
         onDelete={handleDelete}
         onView={handleView}
+        onEdit={handleClickEdit}
       />
     );
   }
@@ -126,7 +134,8 @@ export default function Products() {
               title="Create Product"
               onClick={handleClickCreate}
             />
-            <CreateProductModal
+            <CreateUpdateProductModal
+              productToUpdate={productTarget}
               modalState={modalState}
               isModalOpen={isModalOpen}
               onClose={handleClose}

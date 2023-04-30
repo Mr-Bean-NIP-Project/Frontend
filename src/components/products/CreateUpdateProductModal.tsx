@@ -13,28 +13,41 @@ import { TransformedValues, isNotEmpty, useForm } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconPlus, IconTrash, IconX } from "@tabler/icons-react";
+import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { useMaterialGet } from "@/hooks/material";
-import { useProductCreate, useProductGet } from "@/hooks/product";
+import {
+  useProductCreate,
+  useProductGet,
+  useProductUpdate,
+} from "@/hooks/product";
 import { ModalStateEnum } from "@/types/constants";
 import { Product } from "@/types/types";
 import SubmitButtonInModal from "../shared/SubmitButtonInModal";
 
-interface CreateProductModalProps {
+interface CreateUpdateProductModalProps {
+  productToUpdate?: Product;
   modalState: ModalStateEnum;
   // use isModalOpen for opening and closing of this modal instead of modifying modal state
   isModalOpen: boolean;
   onClose(): void;
 }
 
-const CreateProductModal = ({
+const CreateUpdateProductModal = ({
+  productToUpdate,
   modalState,
   isModalOpen,
   onClose,
-}: CreateProductModalProps) => {
+}: CreateUpdateProductModalProps) => {
   const queryClient = useQueryClient();
   const { data: materials = [] } = useMaterialGet();
   const { data: products = [] } = useProductGet();
+
+  const modalTitle =
+    modalState === ModalStateEnum.Create ? "Create Product" : "Update Product";
+
+  const submitButtonTitle =
+    modalState === ModalStateEnum.Create ? "Create" : "Save";
 
   function transformIngredients(values: any, ingredientType: string) {
     if (ingredientType === "product") {
@@ -63,9 +76,14 @@ const CreateProductModal = ({
 
     validate: {
       name: isNotEmpty("Product name cannot be empty."),
-      serving_size: isNotEmpty("Service size cannot be empty."),
-      serving_unit: isNotEmpty("Service unit cannot be empty."),
-      serving_per_package: isNotEmpty("Service per package cannot be empty."),
+      serving_size: (value) =>
+        value < 1 ? "Serving size cannot be less than 1." : null,
+      serving_unit: (value) =>
+        value !== "g" && value !== "ml"
+          ? "Serving unit can only be g or ml."
+          : null,
+      serving_per_package: (value) =>
+        value < 1 ? "Serving per package cannot be less than 1." : null,
     },
 
     transformValues: (values) => ({
@@ -81,11 +99,23 @@ const CreateProductModal = ({
   type FormValues = typeof form.values;
 
   const createMutation = useProductCreate(queryClient);
+  const updateMutation = useProductUpdate(queryClient);
 
   function handleClose() {
     onClose();
     form.reset();
   }
+
+  const prepopulateFormFields = () => {
+    if (productToUpdate && modalState === ModalStateEnum.Update) {
+      let key: keyof typeof productToUpdate;
+      for (key in productToUpdate) {
+        form.setFieldValue(key, productToUpdate[key]);
+      }
+    }
+  };
+
+  useEffect(() => prepopulateFormFields(), [productToUpdate, modalState]);
 
   async function handleSubmit(values: TransformedValues<typeof form>) {
     if (modalState === ModalStateEnum.Create) {
@@ -235,7 +265,7 @@ const CreateProductModal = ({
               exitDuration: 80,
               timingFunction: "ease",
             }}
-            {...form.getInputProps("unit")}
+            {...form.getInputProps("serving_unit")}
           />
         </Grid.Col>
         <Grid.Col span={12}>
@@ -285,14 +315,14 @@ const CreateProductModal = ({
       closeOnClickOutside={false}
       closeOnEscape={false}
       onClose={handleClose}
-      title="Create Product"
+      title={modalTitle}
     >
       <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
         {createProductFields}
-        <SubmitButtonInModal title="Create" />
+        <SubmitButtonInModal title={submitButtonTitle} />
       </form>
     </Modal>
   );
 };
 
-export default CreateProductModal;
+export default CreateUpdateProductModal;
