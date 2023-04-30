@@ -109,7 +109,7 @@ const CreateUpdateMaterialModal = ({
       Object.values(NUTRITION).forEach((val) =>
         form.setFieldValue(
           val,
-          Number(formatNutriValue(val, materialToUpdate[val]))
+          Number(formatNutriValue(val, materialToUpdate[val], 100))
         )
       );
     }
