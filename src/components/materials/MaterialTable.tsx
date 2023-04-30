@@ -47,7 +47,7 @@ const MaterialTable = ({
           </td>
         </tr>
       )),
-    [materials, onDelete]
+    [materials, onDelete, onEdit, onView]
   );
 
   return (
