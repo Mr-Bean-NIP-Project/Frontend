@@ -38,6 +38,7 @@ export const useProductDelete = (queryClient: QueryClient) => {
             return prod;
           }); // removes deleted product locally
       });
+      queryClient.removeQueries(QUERY_KEYS.PRODUCT_NIP); // remove all the product NIPs if there's any product deletion
     },
   });
 };
