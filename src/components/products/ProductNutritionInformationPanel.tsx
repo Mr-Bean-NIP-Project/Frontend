@@ -47,7 +47,7 @@ export const ProductNutritionInformationPanel = ({
   ));
 
   const table = (
-    <Box style={{ marginBottom: rows.length > 0 ? 25 : 10 }}>
+    <Box style={{ marginBottom: 25 }}>
       <Table
         withBorder
         withColumnBorders
@@ -63,17 +63,13 @@ export const ProductNutritionInformationPanel = ({
         <tbody>
           <tr>
             <td align="center" width={columnWidths[0]}>
-              <Text weight={600} size="lg" />
+              <Text />
             </td>
             <td align="center" width={columnWidths[1]}>
-              <Text weight={600} size="lg">
-                Per Serving
-              </Text>
+              <Text weight={600}>Per Serving</Text>
             </td>
             <td align="center" width={columnWidths[2]}>
-              <Text weight={600} size="lg">
-                {`Per 100${serving_unit}`}
-              </Text>
+              <Text weight={600}>{`Per 100 ${serving_unit}`}</Text>
             </td>
           </tr>
           {rows}
