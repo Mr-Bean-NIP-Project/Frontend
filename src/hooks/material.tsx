@@ -28,6 +28,7 @@ export const useMaterialDelete = (queryClient: QueryClient) => {
       queryClient.setQueryData<Material[]>(QUERY_KEYS.MATERIAL, (old = []) => {
         return old.filter((mat) => mat.id !== materialId); // removes deleted material locally
       });
+      queryClient.removeQueries(QUERY_KEYS.PRODUCT); // remove all products if material is deleted
     },
   });
 };
@@ -70,6 +71,7 @@ export const useMaterialUpdate = (queryClient: QueryClient) => {
         old[oldDataIndex] = { ...data }; // replaces old material info with newly updated material
         return old;
       });
+      queryClient.removeQueries(QUERY_KEYS.PRODUCT); // remove all products if material is updated
     },
   });
 };

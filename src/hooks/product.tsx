@@ -1,6 +1,6 @@
 import axios from "axios";
 import { QueryClient, useMutation, useQuery } from "react-query";
-import { NIP, Nutrition, Product } from "@/types/types";
+import { NIP, Product } from "@/types/types";
 import { QUERY_KEYS } from "../types/constants";
 
 export const useProductGet = () => {
@@ -62,7 +62,7 @@ export const useProductCreate = (queryClient: QueryClient) => {
 
 export const useProductGetNip = (id: number) => {
   return useQuery({
-    queryKey: QUERY_KEYS.PRODUCT_NIP(id),
+    queryKey: QUERY_KEYS.PRODUCT_NIP_ID(id),
     queryFn: async () =>
       (
         await axios.get(
