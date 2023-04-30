@@ -27,9 +27,6 @@ const ViewMaterialDetailModal = ({
         onClose={() => onClose()}
         title={`#${material.id}: ${material.name}`}
       >
-        <Text weight={600} style={{ marginBottom: 10 }}>
-          Nutrition Information per 100 (g or ml)
-        </Text>
         {MaterialNutritionInformationPanel(data)}
       </Modal>
     </>

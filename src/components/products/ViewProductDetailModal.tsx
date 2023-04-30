@@ -68,7 +68,7 @@ const ViewProductDetailModalComponent = ({
   ));
 
   const subProductTable = (
-    <Box style={{ marginBottom: subMaterialRows.length > 0 ? 25 : 10 }}>
+    <Box style={{ marginBottom: subMaterialRows.length > 0 ? 25 : 5 }}>
       <Group position="left" align="inherit">
         <Text weight={600} size="lg" style={{ marginBottom: 10 }}>
           Sub-Products
@@ -92,7 +92,7 @@ const ViewProductDetailModalComponent = ({
   );
 
   const subMaterialTable = (
-    <Box style={{ marginBottom: 10 }}>
+    <Box style={{ marginBottom: 5 }}>
       <Group position="left" align="inherit">
         <Text weight={600} size="lg" style={{ marginBottom: 10 }}>
           Materials

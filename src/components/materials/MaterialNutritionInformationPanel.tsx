@@ -33,7 +33,7 @@ export const MaterialNutritionInformationPanel = (
   ));
 
   const table = (
-    <Box style={{ marginBottom: rows.length > 0 ? 25 : 10 }}>
+    <Box style={{ marginBottom: 5 }}>
       <Table
         withBorder
         withColumnBorders
@@ -45,7 +45,17 @@ export const MaterialNutritionInformationPanel = (
           <col className={classes.nutrientTitle} />
           <col />
         </colgroup>
-        <tbody>{rows}</tbody>
+        <tbody>
+          <tr>
+            <td align="center">
+              <Text />
+            </td>
+            <td align="center">
+              <Text weight={600}>Per 100 g or ml</Text>
+            </td>
+          </tr>
+          {rows}
+        </tbody>
       </Table>
     </Box>
   );
