@@ -7,9 +7,12 @@ import {
   Text,
   createStyles,
 } from "@mantine/core";
+import { useProductGetNip } from "../../hooks/product";
 import { ModalStateEnum } from "../../types/constants";
 import { Product } from "../../types/types";
+import { isEmpty } from "../../util";
 import DimmedMessage from "../shared/DimmedMessage";
+import { NutritionInformationTable } from "../shared/NutritionInformationPanel";
 
 interface ViewProductDetailModalProps {
   product: Product | undefined;
@@ -17,14 +20,22 @@ interface ViewProductDetailModalProps {
   onClose(): void;
 }
 
+interface ViewProductDetailModalComponentProps {
+  product: Product;
+  product_id: number;
+  modalState: ModalStateEnum;
+  onClose(): void;
+}
+
 const NAME_WIDTH = "75%";
 
-export const ViewProductDetailModal = ({
+const ViewProductDetailModalComponent = ({
   product,
+  product_id,
   modalState,
   onClose,
-}: ViewProductDetailModalProps) => {
-  if (!product) return null;
+}: ViewProductDetailModalComponentProps) => {
+  const { data: nip } = useProductGetNip(product_id);
 
   const tableHeaders = (
     <tr>
@@ -104,7 +115,10 @@ export const ViewProductDetailModal = ({
   );
 
   const hasNoResult: boolean =
-    subProductRows.length === 0 && subMaterialRows.length === 0;
+    subProductRows.length === 0 &&
+    subMaterialRows.length === 0 &&
+    (isEmpty(nip?.per_hundred) ?? false) &&
+    (isEmpty(nip?.per_serving) ?? false);
 
   return (
     <>
@@ -120,9 +134,31 @@ export const ViewProductDetailModal = ({
             subtitle={"Edit this product to tag sub-products or materials!"}
           />
         ) : null}
+        {NutritionInformationTable(nip?.per_serving, "Nutrition Per Serving")}
+        {NutritionInformationTable(
+          nip?.per_hundred,
+          `Nutrition Per 100${nip?.serving_unit}`
+        )}
         {subProductRows.length > 0 ? subProductTable : null}
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
     </>
+  );
+};
+
+export const ViewProductDetailModal = ({
+  product,
+  modalState,
+  onClose,
+}: ViewProductDetailModalProps) => {
+  if (!product || !product.id) return null;
+  // so we avoid calling useProductGetNip hook conditionally
+  return (
+    <ViewProductDetailModalComponent
+      product={product}
+      product_id={product.id}
+      modalState={modalState}
+      onClose={onClose}
+    />
   );
 };

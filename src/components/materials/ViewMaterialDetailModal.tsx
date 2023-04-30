@@ -1,16 +1,9 @@
-import { Modal, Table, Text, createStyles } from "@mantine/core";
-import { Material } from "@/types/types";
+import { Modal, Table, Text } from "@mantine/core";
+import { Material, Nutrition } from "@/types/types";
 import { ModalStateEnum } from "../../types/constants";
 import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
+import { NutritionInformationTable } from "../shared/NutritionInformationPanel";
 
-const useStyles = createStyles((theme) => ({
-  nutrientTitle: {
-    backgroundColor:
-      theme.colorScheme === "light"
-        ? theme.colors.gray[0]
-        : theme.colors.gray[9],
-  },
-}));
 interface ViewMaterialDetailModalProps {
   material: Material | undefined;
   modalState: ModalStateEnum;
@@ -22,37 +15,10 @@ const ViewMaterialDetailModal = ({
   modalState,
   onClose,
 }: ViewMaterialDetailModalProps) => {
-  const { classes } = useStyles();
   if (!material) return null;
 
-  const rows = Object.keys(material)
-    .filter((key) => Object.values(NUTRITION).includes(key as NUTRITION))
-    .map((key) => (
-      <tr key={key}>
-        <td width={"40%"}>
-          <Text weight={500}>{formatNutriText(key)}</Text>
-        </td>
-        <td align="right">
-          {formatNutriValue(key as NUTRITION, (material as any)[key])}
-        </td>
-      </tr>
-    ));
-
-  const nutriTable = (
-    <Table
-      withBorder
-      withColumnBorders
-      fontSize="md"
-      horizontalSpacing="md"
-      verticalSpacing="xs"
-    >
-      <colgroup>
-        <col className={classes.nutrientTitle} />
-        <col />
-      </colgroup>
-      <tbody>{rows}</tbody>
-    </Table>
-  );
+  const { name, supplier, id, created_at, updated_at, supplier_id, ...data } =
+    material;
 
   return (
     <>
@@ -65,7 +31,7 @@ const ViewMaterialDetailModal = ({
         <Text weight={600} style={{ marginBottom: 10 }}>
           Nutrition Information per 100 (g or ml)
         </Text>
-        {nutriTable}
+        {NutritionInformationTable(data)}
       </Modal>
     </>
   );

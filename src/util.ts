@@ -1,5 +1,6 @@
 import Big, { BigSource } from "big.js";
 import { parseISO, format } from "date-fns";
+import { Nutrition } from "./types/types";
 
 export enum SERVING_UNIT {
   G = "g",
@@ -33,6 +34,16 @@ export enum NUTRITION {
   DIETARY_FIBRE = "dietary_fibre",
   SODIUM = "sodium",
 }
+
+export const isEmpty = (n: Nutrition | undefined) => {
+  if (!n) return true;
+  for (const field in n) {
+    const num = Number((n as any)[field]);
+    if (Number.isNaN(num) || num !== 0) return false;
+  }
+
+  return true;
+};
 
 export const NUTRITION_MG = [NUTRITION.SODIUM, NUTRITION.CHOLESTEROL];
 export const NUTRITION_G = [
