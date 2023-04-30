@@ -11,9 +11,9 @@ import { useProductGetNip } from "../../hooks/product";
 import { ModalStateEnum } from "../../types/constants";
 import { Product } from "../../types/types";
 import { isEmpty } from "../../util";
+import { SERVING_UNIT } from "../../util";
 import DimmedMessage from "../shared/DimmedMessage";
 import { ProductNutritionInformationPanel } from "./ProductNutritionInformationPanel";
-import { SERVING_UNIT } from "../../util";
 
 interface ViewProductDetailModalProps {
   product: Product | undefined;

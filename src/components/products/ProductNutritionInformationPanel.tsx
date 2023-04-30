@@ -63,7 +63,7 @@ export const ProductNutritionInformationPanel = ({
         <tbody>
           <tr>
             <td align="center" width={columnWidths[0]}>
-              <Text weight={600} size="lg"></Text>
+              <Text weight={600} size="lg" />
             </td>
             <td align="center" width={columnWidths[1]}>
               <Text weight={600} size="lg">
