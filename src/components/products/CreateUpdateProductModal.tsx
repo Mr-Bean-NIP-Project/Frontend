@@ -33,6 +33,9 @@ interface CreateUpdateProductModalProps {
   onClose(): void;
 }
 
+const SUBPRODUCTS_KEY = "sub_product_id_and_quantity";
+const MATERIALS_KEY = "material_id_and_quantity";
+
 const CreateUpdateProductModal = ({
   productToUpdate,
   modalState,
@@ -51,13 +54,13 @@ const CreateUpdateProductModal = ({
 
   function transformIngredients(values: any, ingredientType: string) {
     if (ingredientType === "product") {
-      return values.subproducts
+      return values[`${SUBPRODUCTS_KEY}`]
         .filter((item: any) => item.id && item.quantity)
         .map((item: any) => {
           return { product_id: Number(item.id), quantity: item.quantity };
         });
     }
-    return values.materials
+    return values[`${MATERIALS_KEY}`]
       .filter((item: any) => item.id && item.quantity)
       .map((item: any) => {
         return { material_id: Number(item.id), quantity: item.quantity };
@@ -70,8 +73,12 @@ const CreateUpdateProductModal = ({
       serving_size: 0,
       serving_unit: "g",
       serving_per_package: 1,
-      subproducts: [{ id: undefined, quantity: 0, key: randomId() }],
-      materials: [{ id: undefined, quantity: 0, key: randomId() }],
+      sub_product_id_and_quantity: [
+        { id: undefined, quantity: 0, key: randomId() },
+      ],
+      material_id_and_quantity: [
+        { id: undefined, quantity: 0, key: randomId() },
+      ],
     },
 
     validate: {
@@ -112,6 +119,50 @@ const CreateUpdateProductModal = ({
       for (key in productToUpdate) {
         form.setFieldValue(key, productToUpdate[key]);
       }
+      // prepopulate subproducts
+      (productToUpdate.product_sub_products ?? []).forEach((psp, index) => {
+        form.insertListItem(
+          SUBPRODUCTS_KEY,
+          {
+            id: psp.child.id?.toString(),
+            quantity: psp.quantity,
+            key: randomId(),
+          },
+          index
+        );
+      });
+      if (
+        productToUpdate.product_sub_products &&
+        productToUpdate.product_sub_products.length > 0
+      ) {
+        // remove last empty row after prepopulating
+        form.removeListItem(
+          SUBPRODUCTS_KEY,
+          productToUpdate.product_sub_products.length
+        );
+      }
+      // prepopulate materials
+      (productToUpdate.material_product ?? []).forEach((mp, index) => {
+        form.insertListItem(
+          MATERIALS_KEY,
+          {
+            id: mp.material_id.toString(),
+            quantity: mp.material_quantity,
+            key: randomId(),
+          },
+          index
+        );
+      });
+      if (
+        productToUpdate.material_product &&
+        productToUpdate.material_product.length > 0
+      ) {
+        // remove last empty row after prepopulating
+        form.removeListItem(
+          MATERIALS_KEY,
+          productToUpdate.material_product.length
+        );
+      }
     }
   };
 
@@ -139,11 +190,43 @@ const CreateUpdateProductModal = ({
           message: error.response.data.message,
         });
       }
+    } else if (modalState === ModalStateEnum.Update && productToUpdate) {
+      const valuesToUpdate: any = {};
+      Object.keys(values).forEach((key) => {
+        if (
+          values[key as keyof FormValues] !==
+          productToUpdate[key as keyof Product]
+        ) {
+          valuesToUpdate[key] = values[key as keyof FormValues];
+        }
+      });
+      const payload = {
+        id: productToUpdate?.id,
+        ...valuesToUpdate,
+      };
+
+      try {
+        const data = await updateMutation.mutateAsync(payload);
+        notifications.show({
+          title: "Update Successful",
+          color: "green",
+          icon: <IconCheck />,
+          message: `Product ${data.name} of id: ${data.id} updated!`,
+        });
+        handleClose();
+      } catch (error: any) {
+        notifications.show({
+          title: "Error Updating Product",
+          color: "red",
+          icon: <IconX />,
+          message: error.response.data.message,
+        });
+      }
     }
   }
 
-  function getIngredientSelectData(target: string) {
-    if (target === "subproducts") {
+  function getIngredientSelectData(targetKey: string) {
+    if (targetKey === SUBPRODUCTS_KEY) {
       return products.map((product) => {
         const val = product.id ? product.id.toString() : "";
         return { value: val, label: product.name };
@@ -155,18 +238,18 @@ const CreateUpdateProductModal = ({
     });
   }
 
-  function renderIngredientsSelect(formValueTarget: string) {
+  function renderIngredientsSelect(targetKey: string) {
     const values: any = form.values;
-    return values[formValueTarget as keyof FormValues].map(
+    return values[targetKey as keyof FormValues].map(
       (item: any, index: number) => (
         <Group key={item.key} mt="xs">
           <Grid sx={{ width: "100%" }}>
             <Grid.Col span={7}>
               <Select
                 size="md"
-                data={getIngredientSelectData(formValueTarget)}
+                data={getIngredientSelectData(targetKey)}
                 placeholder={
-                  formValueTarget === "subproducts"
+                  targetKey === SUBPRODUCTS_KEY
                     ? "Select Sub-Product"
                     : "Select Material"
                 }
@@ -180,7 +263,7 @@ const CreateUpdateProductModal = ({
                   exitDuration: 80,
                   timingFunction: "ease",
                 }}
-                {...form.getInputProps(`${formValueTarget}.${index}.id`)}
+                {...form.getInputProps(`${targetKey}.${index}.id`)}
               />
             </Grid.Col>
             <Grid.Col span={4}>
@@ -189,7 +272,7 @@ const CreateUpdateProductModal = ({
                 placeholder="Size (in g or ml)"
                 min={1}
                 step={10}
-                {...form.getInputProps(`${formValueTarget}.${index}.quantity`)}
+                {...form.getInputProps(`${targetKey}.${index}.quantity`)}
               />
             </Grid.Col>
             <Grid.Col span={1}>
@@ -197,10 +280,8 @@ const CreateUpdateProductModal = ({
                 variant="light"
                 color="pink"
                 size="lg"
-                disabled={
-                  values[formValueTarget as keyof FormValues].length <= 1
-                }
-                onClick={() => form.removeListItem(`${formValueTarget}`, index)}
+                disabled={values[targetKey as keyof FormValues].length <= 1}
+                onClick={() => form.removeListItem(targetKey, index)}
               >
                 <IconTrash size="1.25rem" />
               </ActionIcon>
@@ -211,23 +292,21 @@ const CreateUpdateProductModal = ({
     );
   }
 
-  function renderAddIngredientButton(formValueTarget: string) {
+  function renderAddIngredientButton(targetKey: string) {
     return (
       <Button
         leftIcon={<IconPlus size={"1.25rem"} />}
         variant="light"
         sx={{ marginTop: 10 }}
         onClick={() =>
-          form.insertListItem(`${formValueTarget}`, {
+          form.insertListItem(`${targetKey}`, {
             name: undefined,
             active: undefined,
             key: randomId(),
           })
         }
       >
-        {formValueTarget === "subproducts"
-          ? "Add Sub-Products"
-          : "Add Materials"}
+        {targetKey === SUBPRODUCTS_KEY ? "Add Sub-Products" : "Add Materials"}
       </Button>
     );
   }
@@ -287,8 +366,8 @@ const CreateUpdateProductModal = ({
               </Grid.Col>
             </Grid>
           </Group>
-          {renderIngredientsSelect("subproducts")}
-          {renderAddIngredientButton("subproducts")}
+          {renderIngredientsSelect(SUBPRODUCTS_KEY)}
+          {renderAddIngredientButton(SUBPRODUCTS_KEY)}
         </Grid.Col>
         <Grid.Col span={12}>
           <Group>
@@ -301,8 +380,8 @@ const CreateUpdateProductModal = ({
               </Grid.Col>
             </Grid>
           </Group>
-          {renderIngredientsSelect("materials")}
-          {renderAddIngredientButton("materials")}
+          {renderIngredientsSelect(MATERIALS_KEY)}
+          {renderAddIngredientButton(MATERIALS_KEY)}
         </Grid.Col>
       </Grid>
     </>
