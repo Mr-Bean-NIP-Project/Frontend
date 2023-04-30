@@ -27,7 +27,7 @@ export const MaterialNutritionInformationPanel = (
         <Text weight={500}>{formatNutriText(key)}</Text>
       </td>
       <td align="right">
-        {formatNutriValue(key as NUTRITION, (data as any)[key])}
+        {formatNutriValue(key as NUTRITION, (data as any)[key], 100)}
       </td>
     </tr>
   ));

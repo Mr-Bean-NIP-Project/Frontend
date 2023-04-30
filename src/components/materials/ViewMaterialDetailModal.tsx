@@ -1,7 +1,6 @@
 import { Modal, Table, Text } from "@mantine/core";
 import { Material, Nutrition } from "@/types/types";
 import { ModalStateEnum } from "../../types/constants";
-import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
 import { MaterialNutritionInformationPanel } from "./MaterialNutritionInformationPanel";
 
 interface ViewMaterialDetailModalProps {

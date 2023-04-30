@@ -94,10 +94,11 @@ export function formatDate(str: string | undefined) {
 // nutriVal is the actual numeric value
 export function formatNutriValue(
   nutriKey: NUTRITION,
-  nutriVal: BigSource
+  nutriVal: BigSource,
+  multiple: number = 1
 ): string {
   const numDp = NUTRITION_DP[nutriKey];
-  return Big(nutriVal).times(100).toFixed(numDp);
+  return Big(nutriVal).times(multiple).toFixed(numDp);
 }
 
 export function divideNutriValue(
