@@ -15,13 +15,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const NutritionInformationTable = (
-  data: Nutrition | undefined,
-  title: string = "Nutrition"
+export const MaterialNutritionInformationPanel = (
+  data: Nutrition | undefined
 ) => {
   const { classes } = useStyles();
   if (!data) return null;
-  if (isEmpty(data)) return null;
 
   const rows = Object.keys(data).map((key) => (
     <tr key={key}>
@@ -36,9 +34,6 @@ export const NutritionInformationTable = (
 
   const table = (
     <Box style={{ marginBottom: rows.length > 0 ? 25 : 10 }}>
-      <Text weight={600} size="lg" style={{ marginBottom: 10 }}>
-        {title}
-      </Text>
       <Table
         withBorder
         withColumnBorders

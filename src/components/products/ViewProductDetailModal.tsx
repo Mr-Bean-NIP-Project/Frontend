@@ -12,7 +12,8 @@ import { ModalStateEnum } from "../../types/constants";
 import { Product } from "../../types/types";
 import { isEmpty } from "../../util";
 import DimmedMessage from "../shared/DimmedMessage";
-import { NutritionInformationTable } from "../shared/NutritionInformationPanel";
+import { ProductNutritionInformationPanel } from "./ProductNutritionInformationPanel";
+import { SERVING_UNIT } from "../../util";
 
 interface ViewProductDetailModalProps {
   product: Product | undefined;
@@ -134,11 +135,11 @@ const ViewProductDetailModalComponent = ({
             subtitle={"Edit this product to tag sub-products or materials!"}
           />
         ) : null}
-        {NutritionInformationTable(nip?.per_serving, "Nutrition Per Serving")}
-        {NutritionInformationTable(
-          nip?.per_hundred,
-          `Nutrition Per 100${nip?.serving_unit}`
-        )}
+        {ProductNutritionInformationPanel({
+          per_serving: nip?.per_serving,
+          per_hundred: nip?.per_hundred,
+          serving_unit: nip?.serving_unit ?? SERVING_UNIT.G,
+        })}
         {subProductRows.length > 0 ? subProductTable : null}
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
