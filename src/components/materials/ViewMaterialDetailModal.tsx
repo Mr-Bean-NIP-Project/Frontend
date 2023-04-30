@@ -2,7 +2,7 @@ import { Modal, Table, Text } from "@mantine/core";
 import { Material, Nutrition } from "@/types/types";
 import { ModalStateEnum } from "../../types/constants";
 import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
-import { NutritionInformationTable } from "../shared/NutritionInformationPanel";
+import { MaterialNutritionInformationPanel } from "./MaterialNutritionInformationPanel";
 
 interface ViewMaterialDetailModalProps {
   material: Material | undefined;
@@ -31,7 +31,7 @@ const ViewMaterialDetailModal = ({
         <Text weight={600} style={{ marginBottom: 10 }}>
           Nutrition Information per 100 (g or ml)
         </Text>
-        {NutritionInformationTable(data)}
+        {MaterialNutritionInformationPanel(data)}
       </Modal>
     </>
   );
