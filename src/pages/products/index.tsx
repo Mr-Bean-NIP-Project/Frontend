@@ -1,4 +1,4 @@
-import { Box, Container, Group, Text } from "@mantine/core";
+import { Box, Container, Group, Pagination, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
@@ -11,7 +11,7 @@ import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import { useProductDelete, useProductGet } from "@/hooks/product";
-import { ModalStateEnum } from "@/types/constants";
+import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 import { Product } from "../../types/types";
 
@@ -26,6 +26,12 @@ export default function Products() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productTarget, setProductTarget] = useState<Product | undefined>();
+
+  // for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const endIndex = currentPage * ROWS_PER_PAGE;
+  const startIndex = endIndex - ROWS_PER_PAGE;
+  const numPages = Math.ceil(searchResults.length / ROWS_PER_PAGE);
 
   const headerText: string = isSearching
     ? `Showing ${searchResults.length} of ${products.length} product(s)`
@@ -43,6 +49,7 @@ export default function Products() {
     if (searchStr.length === 0) {
       setIsSearching(false);
       setSearchResults(products);
+      setCurrentPage(1);
       return;
     }
     setIsSearching(true);
@@ -55,6 +62,7 @@ export default function Products() {
           searchStr.length <= product.id.toString().length)
     );
     setSearchResults(results);
+    setCurrentPage(1);
   };
 
   function handleClickCreate() {
@@ -108,12 +116,22 @@ export default function Products() {
       return <DimmedMessage title={title} subtitle={subtitle} />;
     }
     return (
-      <ProductTable
-        products={searchResults}
-        onDelete={handleDelete}
-        onView={handleView}
-        onEdit={handleClickEdit}
-      />
+      <Group position="center">
+        <ProductTable
+          products={searchResults.slice(startIndex, endIndex)}
+          onDelete={handleDelete}
+          onView={handleView}
+          onEdit={handleClickEdit}
+        />
+        <Pagination
+          color="gray"
+          withEdges
+          style={{ marginTop: 20 }}
+          value={currentPage}
+          onChange={setCurrentPage}
+          total={numPages > 1 ? numPages : 0}
+        />
+      </Group>
     );
   }
 

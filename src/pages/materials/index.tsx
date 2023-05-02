@@ -1,4 +1,11 @@
-import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
+import {
+  Box,
+  Container,
+  Group,
+  LoadingOverlay,
+  Pagination,
+  Text,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
@@ -12,7 +19,7 @@ import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import ViewMaterialDetailModal from "../../components/materials/ViewMaterialDetailModal";
 import { useMaterialDelete, useMaterialGet } from "../../hooks/material";
-import { ModalStateEnum } from "../../types/constants";
+import { ModalStateEnum, ROWS_PER_PAGE } from "../../types/constants";
 import { Material } from "../../types/types";
 
 export default function Materials() {
@@ -26,6 +33,12 @@ export default function Materials() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [materialTarget, setMaterialTarget] = useState<Material | undefined>();
+
+  // for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const endIndex = currentPage * ROWS_PER_PAGE;
+  const startIndex = endIndex - ROWS_PER_PAGE;
+  const numPages = Math.ceil(searchResults.length / ROWS_PER_PAGE);
 
   useEffect(() => setSearchResults(materials), [materials]);
 
@@ -43,6 +56,7 @@ export default function Materials() {
     if (searchStr.length === 0) {
       setIsSearching(false);
       setSearchResults(materials);
+      setCurrentPage(1);
       return;
     }
     setIsSearching(true);
@@ -55,6 +69,7 @@ export default function Materials() {
           searchStr.length <= material.id.toString().length)
     );
     setSearchResults(results);
+    setCurrentPage(1);
   };
 
   function handleClose() {
@@ -112,12 +127,22 @@ export default function Materials() {
     }
 
     return (
-      <MaterialTable
-        materials={searchResults}
-        onView={handleView}
-        onDelete={handleDelete}
-        onEdit={handleClickEdit}
-      />
+      <Group position="center">
+        <MaterialTable
+          materials={searchResults.slice(startIndex, endIndex)}
+          onView={handleView}
+          onDelete={handleDelete}
+          onEdit={handleClickEdit}
+        />
+        <Pagination
+          color="gray"
+          withEdges
+          style={{ marginTop: 20 }}
+          value={currentPage}
+          onChange={setCurrentPage}
+          total={numPages > 1 ? numPages : 0}
+        />
+      </Group>
     );
   }
 
