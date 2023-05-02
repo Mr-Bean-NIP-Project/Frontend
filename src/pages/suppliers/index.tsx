@@ -1,4 +1,11 @@
-import { Box, Container, Group, LoadingOverlay, Text } from "@mantine/core";
+import {
+  Box,
+  Container,
+  Group,
+  LoadingOverlay,
+  Pagination,
+  Text,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import Head from "next/head";
@@ -10,7 +17,7 @@ import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import CreateUpdateSupplierModal from "@/components/suppliers/CreateUpdateSupplierModal";
 import SupplierTable from "@/components/suppliers/SupplierTable";
-import { ModalStateEnum } from "@/types/constants";
+import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
 import { Supplier } from "@/types/types";
 import { useSupplierDelete, useSupplierGet } from "../../hooks/supplier";
 
@@ -28,6 +35,12 @@ export default function Suppliers() {
     Supplier | undefined
   >();
 
+  // for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const endIndex = currentPage * ROWS_PER_PAGE;
+  const startIndex = endIndex - ROWS_PER_PAGE;
+  const numPages = Math.ceil(searchResults.length / ROWS_PER_PAGE);
+
   useEffect(() => setSearchResults(suppliers), [suppliers]);
 
   const headerText: string = isSearching
@@ -38,6 +51,7 @@ export default function Suppliers() {
     if (searchStr.length === 0) {
       setIsSearching(false);
       setSearchResults(suppliers);
+      setCurrentPage(1);
       return;
     }
     setIsSearching(true);
@@ -50,6 +64,7 @@ export default function Suppliers() {
           searchStr.length <= supplier.id.toString().length)
     );
     setSearchResults(results);
+    setCurrentPage(1);
   };
 
   const deleteMutation = useSupplierDelete(queryClient);
@@ -108,11 +123,21 @@ export default function Suppliers() {
     }
 
     return (
-      <SupplierTable
-        suppliers={searchResults}
-        onEdit={handleClickEdit}
-        onDelete={handleDelete}
-      />
+      <Group position="center">
+        <SupplierTable
+          suppliers={searchResults.slice(startIndex, endIndex)}
+          onEdit={handleClickEdit}
+          onDelete={handleDelete}
+        />
+        <Pagination
+          color="gray"
+          withEdges
+          style={{ marginTop: 20 }}
+          value={currentPage}
+          onChange={setCurrentPage}
+          total={numPages > 1 ? numPages : 0}
+        />
+      </Group>
     );
   }
 
