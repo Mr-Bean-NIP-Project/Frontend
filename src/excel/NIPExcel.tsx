@@ -15,6 +15,7 @@ export function formatAndDownloadNip(nip: NIP) {
     ["- Saturated", nip.per_serving.saturated_fat, "g", nip.per_hundred.saturated_fat, "g"],
     ["Trans Fat", nip.per_serving.trans_fat, "g", nip.per_hundred.trans_fat, "g"],
     ["Cholesterol", nip.per_serving.cholesterol, "mg", nip.per_hundred.cholesterol, "mg"],
+    ["Carbohydrate", nip.per_serving.carbohydrate, "g", nip.per_hundred.carbohydrate, "g"],
     ["- Sugars", nip.per_serving.sugars, "g", nip.per_hundred.sugars, "g"],
     ["Dietary Fibre", nip.per_serving.dietary_fibre, "g", nip.per_hundred.dietary_fibre, "g"],
     ["Sodium", nip.per_serving.sodium, "mg", nip.per_hundred.sodium, "mg"],
