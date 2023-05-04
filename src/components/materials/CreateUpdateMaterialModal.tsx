@@ -14,9 +14,9 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { useMaterialCreate, useMaterialUpdate } from "@/hooks/material";
-import { useSupplierGet } from "@/hooks/supplier";
+import { useSupplierCreate, useSupplierGet } from "@/hooks/supplier";
 import { ModalStateEnum } from "@/types/constants";
-import { Material } from "@/types/types";
+import { Material, Supplier } from "@/types/types";
 import {
   NUTRITION,
   NUTRITION_DP,
@@ -217,6 +217,29 @@ const CreateUpdateMaterialModal = ({
     });
   }
 
+  const createSupplierMutation = useSupplierCreate(queryClient);
+  async function createNewSupplier(newSupplier: Supplier) {
+    try {
+      const data = await createSupplierMutation.mutateAsync(newSupplier);
+      notifications.show({
+        title: "Create Successful",
+        color: "green",
+        icon: <IconCheck />,
+        message: `New supplier ${data.name} of id: ${data.id} created!`,
+      });
+      if (data.id) {
+        form.setFieldValue("supplier_id", data.id.toString());
+      }
+    } catch (error: any) {
+      notifications.show({
+        title: "Error Creating Supplier",
+        color: "red",
+        icon: <IconX />,
+        message: error.response.data.message,
+      });
+    }
+  }
+
   const materialFields = (
     <>
       <Grid gutter="md">
@@ -237,6 +260,14 @@ const CreateUpdateMaterialModal = ({
             nothingFound="No matching suppliers found"
             searchable
             clearable
+            creatable
+            getCreateLabel={(query) => `+ Create Supplier: ${query}`}
+            onCreate={(query) => {
+              const item = { value: query, label: query };
+              const newSupplier = { name: query };
+              createNewSupplier(newSupplier);
+              return item;
+            }}
             transitionProps={{
               transition: "scale-y",
               duration: 150,
