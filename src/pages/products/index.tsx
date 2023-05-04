@@ -14,12 +14,12 @@ import {
   getProductNip,
   useProductDelete,
   useProductGet,
-  useProductGetNip,
 } from "@/hooks/product";
 import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 import { Product } from "../../types/types";
 import * as XLSX from "xlsx";
+import { formatAndDownloadNip } from "../../excel/NIPExcel";
 
 export default function Products() {
   const queryClient = useQueryClient();
@@ -116,10 +116,7 @@ export default function Products() {
     if (!product || !product.id) return;
     // TODO fill
     const nip = await getProductNip(product.id);
-    const ws = XLSX.utils.json_to_sheet([nip.per_serving, nip.per_hundred]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "NIP");
-    XLSX.writeFile(wb, "test.xlsx");
+    formatAndDownloadNip(nip);
   }
 
   function renderBody() {

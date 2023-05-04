@@ -2,6 +2,7 @@ import axios from "axios";
 import { QueryClient, useMutation, useQuery } from "react-query";
 import { NIP, Product } from "@/types/types";
 import { QUERY_KEYS } from "../types/constants";
+import * as XLSX from "xlsx";
 
 export const useProductGet = () => {
   return useQuery({
