@@ -106,6 +106,11 @@ export default function Products() {
     setProductTarget(product);
   }
 
+  function handleDownloadNip(product: Product) {
+    if (!product) return;
+    // TODO fill
+  }
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -122,6 +127,7 @@ export default function Products() {
           onDelete={handleDelete}
           onView={handleView}
           onEdit={handleClickEdit}
+          onDownloadNip={handleDownloadNip}
         />
         <Pagination
           color="gray"
