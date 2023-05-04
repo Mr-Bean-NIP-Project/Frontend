@@ -89,11 +89,14 @@ export const useProductUpdate = (queryClient: QueryClient) => {
 export const useProductGetNip = (id: number) => {
   return useQuery({
     queryKey: QUERY_KEYS.PRODUCT_NIP_ID(id),
-    queryFn: async () =>
-      (
-        await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.PRODUCT}/${id}/nip`
-        )
-      ).data as NIP,
+    queryFn: async () => getProductNip(id),
   });
 };
+
+export async function getProductNip(id: number): Promise<NIP> {
+  return (
+    await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.PRODUCT}/${id}/nip`
+    )
+  ).data as NIP;
+}

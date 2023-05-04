@@ -10,10 +10,16 @@ import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import { useProductDelete, useProductGet } from "@/hooks/product";
+import {
+  getProductNip,
+  useProductDelete,
+  useProductGet,
+  useProductGetNip,
+} from "@/hooks/product";
 import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 import { Product } from "../../types/types";
+import * as XLSX from "xlsx";
 
 export default function Products() {
   const queryClient = useQueryClient();
@@ -106,9 +112,14 @@ export default function Products() {
     setProductTarget(product);
   }
 
-  function handleDownloadNip(product: Product) {
-    if (!product) return;
+  async function handleDownloadNip(product: Product) {
+    if (!product || !product.id) return;
     // TODO fill
+    const nip = await getProductNip(product.id);
+    const ws = XLSX.utils.json_to_sheet([nip.per_serving, nip.per_hundred]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "NIP");
+    XLSX.writeFile(wb, "test.xlsx");
   }
 
   function renderBody() {
