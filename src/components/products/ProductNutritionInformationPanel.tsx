@@ -1,11 +1,6 @@
 import { Table, createStyles, Text, Box } from "@mantine/core";
 import { Nutrition } from "../../types/types";
-import {
-  NUTRITION,
-  formatNutriText,
-  formatNutriValue,
-  isEmpty,
-} from "../../util";
+import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
 const useStyles = createStyles((theme) => ({
   nutrientTitle: {
     backgroundColor:
@@ -28,7 +23,6 @@ export const ProductNutritionInformationPanel = ({
 }: ProductNutritionInformationPanelProps) => {
   const { classes } = useStyles();
   if (!per_serving || !per_hundred) return null;
-  if (isEmpty(per_serving) && isEmpty(per_hundred)) return null;
 
   const columnWidths = ["40%", "30%", "30%"];
 
