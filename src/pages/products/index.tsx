@@ -18,7 +18,6 @@ import {
 import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 import { Product } from "../../types/types";
-import * as XLSX from "xlsx";
 import { formatAndDownloadNip } from "../../excel/NIPExcel";
 
 export default function Products() {

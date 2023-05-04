@@ -1,5 +1,5 @@
 import { NIP } from "../types/types";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx-js-style";
 
 const NUMBER_OF_ROWS = 15;
 
@@ -74,6 +74,9 @@ export function formatAndDownloadNip(nip: NIP) {
     }
   }
   ws["!merges"] = merges;
+  ws["!cols"] = [{
+    wch: 15
+  }]
 
   XLSX.utils.book_append_sheet(wb, ws, "NIP");
   XLSX.writeFile(wb, "test.xlsx");
