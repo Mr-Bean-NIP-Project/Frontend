@@ -329,6 +329,7 @@ const CreateUpdateProductModal = ({
             label="Serving Size (in g or ml)"
             placeholder="Serving Size (in g or ml)"
             min={1}
+            precision={2} // 2dp
             step={10}
             {...form.getInputProps("serving_size")}
           />
