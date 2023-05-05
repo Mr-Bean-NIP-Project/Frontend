@@ -10,7 +10,11 @@ import DimmedMessage from "@/components/shared/DimmedMessage";
 import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
-import { useProductDelete, useProductGet } from "@/hooks/product";
+import {
+  useProductDelete,
+  useProductGet,
+  useProductGetNipExcel,
+} from "@/hooks/product";
 import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 import { Product } from "../../types/types";
@@ -25,7 +29,11 @@ export default function Products() {
     ModalStateEnum.Hidden
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productTarget, setProductTarget] = useState<Product | undefined>();
+  const [productTarget, setProductTarget] = useState<Product | undefined>(
+    undefined
+  );
+  const [nipTargetId, setNipTargetId] = useState<number | undefined>(undefined);
+  useProductGetNipExcel(nipTargetId); // when nipTargetId changes, it'll download
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -106,6 +114,11 @@ export default function Products() {
     setProductTarget(product);
   }
 
+  async function handleDownloadNip(product: Product) {
+    if (!product || !product.id) return;
+    setNipTargetId(product.id); // procs download nip
+  }
+
   function renderBody() {
     if (searchResults.length === 0) {
       if (isSearching) {
@@ -122,6 +135,7 @@ export default function Products() {
           onDelete={handleDelete}
           onView={handleView}
           onEdit={handleClickEdit}
+          onDownloadNip={handleDownloadNip}
         />
         <Pagination
           color="gray"

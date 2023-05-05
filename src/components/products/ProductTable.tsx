@@ -10,12 +10,14 @@ import { formatDate } from "../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
 import ViewActionButton from "../shared/ViewActionButton";
+import { ProductActionsButton } from "./ProductActionsButton";
 
 interface ProductTableProps {
   products: Product[];
   onDelete(id?: number): void;
   onView(product: Product): void;
   onEdit(product: Product): void;
+  onDownloadNip(product: Product): void;
 }
 
 const ProductTable = ({
@@ -23,6 +25,7 @@ const ProductTable = ({
   onDelete,
   onView,
   onEdit,
+  onDownloadNip,
 }: ProductTableProps) => {
   const rows = useMemo(
     () =>
@@ -39,12 +42,19 @@ const ProductTable = ({
           <td width={TABLE_DATE_WIDTH}>{formatDate(product.updated_at)}</td>
           <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
-              <ViewActionButton onClick={() => onView(product)} />
+              <ProductActionsButton
+                onDownload={() => onDownloadNip(product)}
+                onView={() => onView(product)}
+                onEdit={() => onEdit(product)}
+                onDelete={() => onDelete(product.id)}
+                itemName={product.name}
+              />
+              {/* <ViewActionButton onClick={() => onView(product)} />
               <EditActionButton onClick={() => onEdit(product)} />
               <DeleteActionButton
                 onDelete={() => onDelete(product.id)}
                 itemName={product.name}
-              />
+              /> */}
             </Group>
           </td>
         </tr>

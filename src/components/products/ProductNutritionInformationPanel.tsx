@@ -1,31 +1,24 @@
-import { Table, createStyles, Text, Box } from "@mantine/core";
+import { Box, Table, Text } from "@mantine/core";
 import { Nutrition } from "../../types/types";
 import { NUTRITION, formatNutriText, formatNutriValue } from "../../util";
-const useStyles = createStyles((theme) => ({
-  nutrientTitle: {
-    backgroundColor:
-      theme.colorScheme === "light"
-        ? theme.colors.gray[0]
-        : theme.colors.gray[9],
-  },
-}));
-
 interface ProductNutritionInformationPanelProps {
   per_serving: Nutrition | undefined;
   per_hundred: Nutrition | undefined;
   serving_unit: string;
+  toShow: boolean;
+  NIPClass: { nutrientTitle: string };
 }
 
 export const ProductNutritionInformationPanel = ({
   per_serving,
   per_hundred,
   serving_unit,
+  toShow,
+  NIPClass,
 }: ProductNutritionInformationPanelProps) => {
-  const { classes } = useStyles();
-  if (!per_serving || !per_hundred) return null;
+  if (!per_serving || !per_hundred || !toShow) return null;
 
   const columnWidths = ["40%", "30%", "30%"];
-
   const rows = Object.keys(per_serving).map((key) => (
     <tr key={key}>
       <td width={columnWidths[0]}>
@@ -50,7 +43,7 @@ export const ProductNutritionInformationPanel = ({
         verticalSpacing="xs"
       >
         <colgroup>
-          <col className={classes.nutrientTitle} />
+          <col className={NIPClass.nutrientTitle} />
           <col />
           <col />
         </colgroup>

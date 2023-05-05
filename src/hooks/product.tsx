@@ -1,6 +1,8 @@
 import axios from "axios";
+import { useEffect } from "react";
 import { QueryClient, useMutation, useQuery } from "react-query";
 import { NIP, Product } from "@/types/types";
+import { formatAndDownloadNip } from "../excel/NIPExcel";
 import { QUERY_KEYS } from "../types/constants";
 
 export const useProductGet = () => {
@@ -86,14 +88,25 @@ export const useProductUpdate = (queryClient: QueryClient) => {
   });
 };
 
-export const useProductGetNip = (id: number) => {
+export const useProductGetNip = (id?: number) => {
   return useQuery({
     queryKey: QUERY_KEYS.PRODUCT_NIP_ID(id),
-    queryFn: async () =>
-      (
-        await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.PRODUCT}/${id}/nip`
-        )
-      ).data as NIP,
+    queryFn: async () => (id ? await getProductNip(id) : undefined),
   });
+};
+
+export async function getProductNip(id: number): Promise<NIP> {
+  return (
+    await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/${QUERY_KEYS.PRODUCT}/${id}/nip`
+    )
+  ).data as NIP;
+}
+
+export const useProductGetNipExcel = (id?: number) => {
+  const { data: nip } = useProductGetNip(id);
+  useEffect(() => {
+    if (!nip) return;
+    formatAndDownloadNip(nip);
+  }, [nip]);
 };

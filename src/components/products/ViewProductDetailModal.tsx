@@ -7,11 +7,11 @@ import {
   Text,
   createStyles,
 } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useProductGetNip } from "../../hooks/product";
 import { ModalStateEnum } from "../../types/constants";
-import { Product } from "../../types/types";
-import { isEmpty } from "../../util";
-import { SERVING_UNIT } from "../../util";
+import { NIP, Product } from "../../types/types";
+import { SERVING_UNIT, isEmpty } from "../../util";
 import DimmedMessage from "../shared/DimmedMessage";
 import { ProductNutritionInformationPanel } from "./ProductNutritionInformationPanel";
 
@@ -30,13 +30,23 @@ interface ViewProductDetailModalComponentProps {
 
 const NAME_WIDTH = "75%";
 
-const ViewProductDetailModalComponent = ({
+export const ViewProductDetailModal = ({
   product,
-  product_id,
   modalState,
   onClose,
-}: ViewProductDetailModalComponentProps) => {
-  const { data: nip } = useProductGetNip(product_id);
+}: ViewProductDetailModalProps) => {
+  const [nip, setNip] = useState<NIP | undefined>(undefined);
+  const { data: fetchedNip } = useProductGetNip(product?.id);
+  useEffect(() => setNip(fetchedNip), [fetchedNip]);
+  const { classes: NIPClass } = createStyles((theme) => ({
+    nutrientTitle: {
+      backgroundColor:
+        theme.colorScheme === "light"
+          ? theme.colors.gray[0]
+          : theme.colors.gray[9],
+    },
+  }))();
+  if (!product) return null;
 
   const tableHeaders = (
     <tr>
@@ -135,33 +145,16 @@ const ViewProductDetailModalComponent = ({
             subtitle={"Edit this product to tag sub-products or materials!"}
           />
         ) : null}
-        {subProductRows.length > 0 || subMaterialRows.length > 0
-          ? ProductNutritionInformationPanel({
-              per_serving: nip?.per_serving,
-              per_hundred: nip?.per_hundred,
-              serving_unit: nip?.serving_unit ?? SERVING_UNIT.G,
-            })
-          : null}
+        {ProductNutritionInformationPanel({
+          per_serving: nip?.per_serving,
+          per_hundred: nip?.per_hundred,
+          serving_unit: nip?.serving_unit ?? SERVING_UNIT.G,
+          toShow: subProductRows.length > 0 || subMaterialRows.length > 0,
+          NIPClass: NIPClass,
+        })}
         {subProductRows.length > 0 ? subProductTable : null}
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
     </>
-  );
-};
-
-export const ViewProductDetailModal = ({
-  product,
-  modalState,
-  onClose,
-}: ViewProductDetailModalProps) => {
-  if (!product || !product.id) return null;
-  // so we avoid calling useProductGetNip hook conditionally
-  return (
-    <ViewProductDetailModalComponent
-      product={product}
-      product_id={product.id}
-      modalState={modalState}
-      onClose={onClose}
-    />
   );
 };
