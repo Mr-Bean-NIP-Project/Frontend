@@ -10,7 +10,7 @@ import { formatDate } from "../../util";
 import DeleteActionButton from "../shared/DeleteActionButton";
 import EditActionButton from "../shared/EditActionButton";
 import ViewActionButton from "../shared/ViewActionButton";
-import { DownloadNipButton } from "./DownloadNipButton";
+import { ProductActionsButton } from "./ProductActionsButton";
 
 interface ProductTableProps {
   products: Product[];
@@ -42,13 +42,19 @@ const ProductTable = ({
           <td width={TABLE_DATE_WIDTH}>{formatDate(product.updated_at)}</td>
           <td width={TABLE_ACTIONS_WIDTH}>
             <Group position="right">
-              <DownloadNipButton onClick={() => onDownloadNip(product)} />
-              <ViewActionButton onClick={() => onView(product)} />
+              <ProductActionsButton
+                onDownload={() => onDownloadNip(product)}
+                onView={() => onView(product)}
+                onEdit={() => onEdit(product)}
+                onDelete={() => onDelete(product.id)}
+                itemName={product.name}
+              />
+              {/* <ViewActionButton onClick={() => onView(product)} />
               <EditActionButton onClick={() => onEdit(product)} />
               <DeleteActionButton
                 onDelete={() => onDelete(product.id)}
                 itemName={product.name}
-              />
+              /> */}
             </Group>
           </td>
         </tr>

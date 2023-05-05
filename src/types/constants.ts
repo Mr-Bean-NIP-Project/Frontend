@@ -13,9 +13,9 @@ export const QUERY_KEYS = {
   PRODUCT_NIP_ID: (id?: number) => [...QUERY_KEYS.PRODUCT_NIP, id],
 };
 
-export const TABLE_ID_WIDTH = "10%";
+export const TABLE_ID_WIDTH = "9%";
 export const TABLE_DATE_WIDTH = "15%";
-export const TABLE_ACTIONS_WIDTH = "13%";
+export const TABLE_ACTIONS_WIDTH = "11%";
 export const TABLE_MATERIAL_SUPPLIER_NAME_WIDTH = "15%";
 
 export const ROWS_PER_PAGE = 10;
