@@ -114,7 +114,9 @@ export const ProductActionsButton = ({
           </ActionIcon>
         </Menu.Target>
 
-        <Menu.Dropdown>
+        <Menu.Dropdown
+          sx={{ boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }}
+        >
           <Menu.Item
             icon={<IconDownload size="1.25rem" stroke={1.5} color="gray" />}
             onClick={handleClickDownload}
@@ -162,16 +164,5 @@ export const ProductActionsButton = ({
         </Menu.Dropdown>
       </Menu>
     </Group>
-
-    // <ActionIcon
-    //   size="lg"
-    //   radius="md"
-    //   color={theme.primaryColor}
-    //   variant={theme.colorScheme === "light" ? "outline" : "light"}
-    //   sx={{ border: "1.5px solid" }}
-    //   onClick={onDownload}
-    // >
-    //   <IconDownload size={"1.25rem"} />
-    // </ActionIcon>
   );
 };
