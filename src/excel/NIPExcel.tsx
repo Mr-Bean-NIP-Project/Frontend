@@ -58,7 +58,7 @@ export function formatAndDownloadNip(nip: NIP) {
     ],
     ["Sodium", nip.per_serving.sodium, "mg", nip.per_hundred.sodium, "mg"],
   ].map((row, rowNum) =>
-    row.map((cell, colNum) => {
+    row.map((cell) => {
       const rowNumOneIndexed = rowNum + 1;
       let style = {};
       if ([1, 2].includes(rowNumOneIndexed)) {
