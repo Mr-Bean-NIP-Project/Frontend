@@ -1,5 +1,5 @@
-import { NIP } from "../types/types";
 import * as XLSX from "xlsx-js-style";
+import { NIP } from "../types/types";
 
 const NUMBER_OF_ROWS = 15;
 

@@ -1,9 +1,3 @@
-import { Box, Container, Group, Pagination, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
-import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
 import CreateUpdateProductModal from "@/components/products/CreateUpdateProductModal";
 import ProductTable from "@/components/products/ProductTable";
 import DimmedMessage from "@/components/shared/DimmedMessage";
@@ -11,14 +5,19 @@ import LargeCreateButton from "@/components/shared/LargeCreateButton";
 import NoSearchResultsMessage from "@/components/shared/NoSearchResultsMessage";
 import SharedSearchBar from "@/components/shared/SearchBar";
 import {
-  getProductNip,
   useProductDelete,
   useProductGet,
+  useProductGetNipExcel,
 } from "@/hooks/product";
 import { ModalStateEnum, ROWS_PER_PAGE } from "@/types/constants";
+import { Box, Container, Group, Pagination, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import Head from "next/head";
+import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 import { ViewProductDetailModal } from "../../components/products/ViewProductDetailModal";
 import { Product } from "../../types/types";
-import { formatAndDownloadNip } from "../../excel/NIPExcel";
 
 export default function Products() {
   const queryClient = useQueryClient();
@@ -30,7 +29,11 @@ export default function Products() {
     ModalStateEnum.Hidden
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productTarget, setProductTarget] = useState<Product | undefined>();
+  const [productTarget, setProductTarget] = useState<Product | undefined>(
+    undefined
+  );
+  const [nipTargetId, setNipTargetId] = useState<number | undefined>(undefined);
+  useProductGetNipExcel(nipTargetId); // when nipTargetId changes, it'll download
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -113,9 +116,7 @@ export default function Products() {
 
   async function handleDownloadNip(product: Product) {
     if (!product || !product.id) return;
-    // TODO fill
-    const nip = await getProductNip(product.id);
-    formatAndDownloadNip(nip);
+    setNipTargetId(product.id); // procs download nip
   }
 
   function renderBody() {

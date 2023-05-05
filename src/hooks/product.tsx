@@ -2,6 +2,8 @@ import axios from "axios";
 import { QueryClient, useMutation, useQuery } from "react-query";
 import { NIP, Product } from "@/types/types";
 import { QUERY_KEYS } from "../types/constants";
+import { formatAndDownloadNip } from "../excel/NIPExcel";
+import { useEffect } from "react";
 
 export const useProductGet = () => {
   return useQuery({
@@ -86,10 +88,10 @@ export const useProductUpdate = (queryClient: QueryClient) => {
   });
 };
 
-export const useProductGetNip = (id: number) => {
+export const useProductGetNip = (id?: number) => {
   return useQuery({
     queryKey: QUERY_KEYS.PRODUCT_NIP_ID(id),
-    queryFn: async () => getProductNip(id),
+    queryFn: async () => (id ? await getProductNip(id) : undefined),
   });
 };
 
@@ -100,3 +102,11 @@ export async function getProductNip(id: number): Promise<NIP> {
     )
   ).data as NIP;
 }
+
+export const useProductGetNipExcel = (id?: number) => {
+  const { data: nip } = useProductGetNip(id);
+  useEffect(() => {
+    if (!nip) return;
+    formatAndDownloadNip(nip);
+  }, [nip]);
+};

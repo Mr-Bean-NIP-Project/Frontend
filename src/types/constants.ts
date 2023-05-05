@@ -10,7 +10,7 @@ export const QUERY_KEYS = {
   MATERIAL: ["material"],
   PRODUCT: ["product"],
   PRODUCT_NIP: ["product", "nip"],
-  PRODUCT_NIP_ID: (id: number) => [...QUERY_KEYS.PRODUCT_NIP, id],
+  PRODUCT_NIP_ID: (id?: number) => [...QUERY_KEYS.PRODUCT_NIP, id],
 };
 
 export const TABLE_ID_WIDTH = "10%";
