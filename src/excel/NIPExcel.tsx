@@ -169,6 +169,7 @@ export function formatAndDownloadNip(nip: NIP) {
   ws["!merges"] = merges;
   ws["!cols"] = [
     {
+      // change first col to 15 characters long
       wch: 15,
     },
   ];
