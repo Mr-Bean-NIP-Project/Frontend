@@ -58,8 +58,9 @@ export function formatAndDownloadNip(nip: NIP) {
     ],
     ["Sodium", nip.per_serving.sodium, "mg", nip.per_hundred.sodium, "mg"],
   ].map((row, rowNum) =>
-    row.map((cell) => {
+    row.map((cell, colNum) => {
       const rowNumOneIndexed = rowNum + 1;
+      const colNumOneIndexed = colNum + 1;
       let style = {};
       if ([1, 2].includes(rowNumOneIndexed)) {
         // bold first 2 rows
@@ -69,8 +70,16 @@ export function formatAndDownloadNip(nip: NIP) {
             bold: true,
           },
         };
-      } else if ([4, 5].includes(rowNumOneIndexed)) {
-        // for Averge Quantity and Per Serving and Per 100g
+      }
+      const isNumberField: boolean =
+        [6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(rowNumOneIndexed) &&
+        [2, 4].includes(colNumOneIndexed);
+      const isUnitsField: boolean =
+        [6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(rowNumOneIndexed) &&
+        [3, 5].includes(colNumOneIndexed);
+
+      if ([4, 5].includes(rowNumOneIndexed) || isNumberField) {
+        // for centering Average Quantity or Per Serving or Per 100g or Number
         style = {
           ...style,
           alignment: {
@@ -79,9 +88,10 @@ export function formatAndDownloadNip(nip: NIP) {
           },
         };
       }
-      return {
-        v: cell,
-        s: {
+
+      if (!isNumberField && !isUnitsField) {
+        // border everything if not number or units
+        style = {
           ...style,
           border: {
             top: {
@@ -97,7 +107,43 @@ export function formatAndDownloadNip(nip: NIP) {
               style: "thin",
             },
           },
-        },
+        };
+      } else if (rowNumOneIndexed === 15) {
+        // if (isNumberField || isUnitsField) && row === 15
+        style = {
+          ...style,
+          border: {
+            bottom: {
+              style: "thin",
+            },
+          },
+        };
+      }
+
+      if (isUnitsField) {
+        // all units have right border
+        let border = {
+          right: {
+            style: "thin",
+          },
+        } as any;
+        if (rowNumOneIndexed === 15) {
+          border = {
+            ...border,
+            bottom: {
+              style: "thin",
+            },
+          };
+        }
+        style = {
+          ...style,
+          border,
+        };
+      }
+
+      return {
+        v: cell,
+        s: style,
       };
     })
   );
