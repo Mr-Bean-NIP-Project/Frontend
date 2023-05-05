@@ -135,11 +135,13 @@ const ViewProductDetailModalComponent = ({
             subtitle={"Edit this product to tag sub-products or materials!"}
           />
         ) : null}
-        {ProductNutritionInformationPanel({
-          per_serving: nip?.per_serving,
-          per_hundred: nip?.per_hundred,
-          serving_unit: nip?.serving_unit ?? SERVING_UNIT.G,
-        })}
+        {subProductRows.length > 0 || subMaterialRows.length > 0
+          ? ProductNutritionInformationPanel({
+              per_serving: nip?.per_serving,
+              per_hundred: nip?.per_hundred,
+              serving_unit: nip?.serving_unit ?? SERVING_UNIT.G,
+            })
+          : null}
         {subProductRows.length > 0 ? subProductTable : null}
         {subMaterialRows.length > 0 ? subMaterialTable : null}
       </Modal>
