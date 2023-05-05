@@ -174,7 +174,7 @@ export function formatAndDownloadNip(nip: NIP) {
   ];
 
   XLSX.utils.book_append_sheet(wb, ws, "NIP");
-  XLSX.writeFile(wb, "test.xlsx");
+  XLSX.writeFile(wb, `${nip.name}_NIP.xlsx`);
 }
 
 function generateMergeRange(
