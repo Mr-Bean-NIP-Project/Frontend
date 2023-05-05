@@ -268,9 +268,10 @@ const CreateUpdateProductModal = ({
             </Grid.Col>
             <Grid.Col span={4}>
               <NumberInput
+                precision={2} // 2dp
                 size="md"
                 placeholder="Size (in g or ml)"
-                min={1}
+                min={0}
                 step={10}
                 {...form.getInputProps(`${targetKey}.${index}.quantity`)}
               />
@@ -349,9 +350,10 @@ const CreateUpdateProductModal = ({
         </Grid.Col>
         <Grid.Col span={12}>
           <NumberInput
+            precision={2} // 2dp
             size="md"
             label="Serving per Package"
-            min={1}
+            min={0}
             {...form.getInputProps("serving_per_package")}
           />
         </Grid.Col>
