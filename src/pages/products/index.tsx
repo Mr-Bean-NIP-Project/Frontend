@@ -33,7 +33,7 @@ export default function Products() {
     undefined
   );
   const [nipTargetId, setNipTargetId] = useState<number | undefined>(undefined);
-  useProductGetNipExcel(nipTargetId); // when nipTargetId changes, it'll download
+  useProductGetNipExcel({ id: nipTargetId, setId: setNipTargetId }); // when nipTargetId changes, it'll download
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);

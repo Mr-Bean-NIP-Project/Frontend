@@ -103,10 +103,22 @@ export async function getProductNip(id: number): Promise<NIP> {
   ).data as NIP;
 }
 
-export const useProductGetNipExcel = (id?: number) => {
+interface useProductGetNipExcelProps {
+  id?: number;
+  setId: (id?: number) => void;
+}
+
+export const useProductGetNipExcel = ({
+  id,
+  setId,
+}: useProductGetNipExcelProps) => {
   const { data: nip } = useProductGetNip(id);
   useEffect(() => {
     if (!nip) return;
     formatAndDownloadNip(nip);
+    return () => {
+      // after download remove from nip id
+      setId(undefined);
+    };
   }, [nip]);
 };
